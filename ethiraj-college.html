@@ -1,0 +1,2422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ethiraj College for Women — Digital Universe</title>
+<meta name="description" content="Ethiraj College for Women, Chennai. Bold. Brilliant. Unstoppable. Est. 1948."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,900&family=Space+Grotesk:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+/* ============================
+   DESIGN SYSTEM
+============================ */
+:root {
+  --red: #8B0000;
+  --red2: #C41E1E;
+  --gold: #FFD700;
+  --gold2: #FFF5CC;
+  --cyan: #00E5FF;
+  --void: #030205;
+  --void2: #0a0710;
+  --void3: #100d18;
+  --ink: #F0EAE0;
+  --ink2: rgba(240,234,224,0.5);
+  --line: rgba(255,215,0,0.06);
+  --rline: rgba(139,0,0,0.12);
+}
+[data-theme="light"] {
+  --void: #faf6f0;
+  --void2: #f0ebe2;
+  --void3: #e8e0d4;
+  --ink: #1a0a0a;
+  --ink2: rgba(26,10,10,0.55);
+  --line: rgba(139,0,0,0.08);
+  --rline: rgba(139,0,0,0.12);
+}
+
+/* ============================
+   RESET
+============================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { overflow-x:hidden; scroll-behavior:smooth; }
+body {
+  font-family:'Space Grotesk',sans-serif;
+  background:var(--void);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+/* All interactive elements are always clickable */
+a, button, input, textarea, select, [onclick], [role="button"] {
+  pointer-events:auto !important;
+}
+
+/* ============================
+   CUSTOM CURSOR (desktop only)
+============================ */
+@media (hover:hover) and (pointer:fine) {
+  body, body * { cursor:none !important; }
+}
+@media (hover:none),(pointer:coarse) {
+  body, body * { cursor:auto !important; }
+  #cur, #cur-ring { display:none !important; }
+}
+#cur {
+  position:fixed;
+  width:12px; height:12px;
+  border-radius:50%;
+  background:var(--gold);
+  pointer-events:none;
+  z-index:999999;
+  top:0; left:0;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 12px rgba(255,215,0,0.9), 0 0 4px rgba(255,215,0,1);
+  transition:width .15s ease, height .15s ease, background .15s ease;
+  display:none;
+}
+#cur-ring {
+  position:fixed;
+  width:38px; height:38px;
+  border-radius:50%;
+  border:1.5px solid rgba(255,215,0,0.45);
+  pointer-events:none;
+  z-index:999998;
+  top:0; left:0;
+  transform:translate(-50%,-50%);
+  transition:width .25s ease, height .25s ease, border-color .2s ease;
+  display:none;
+}
+#cur.on-link { width:20px; height:20px; background:var(--red2); box-shadow:0 0 16px rgba(196,30,30,0.9); }
+#cur-ring.on-link { width:54px; height:54px; border-color:rgba(196,30,30,0.55); }
+
+/* ============================
+   SCROLL PROGRESS
+============================ */
+#spbar {
+  position:fixed; top:0; left:0; height:2px;
+  background:linear-gradient(90deg,var(--red),var(--gold),var(--cyan));
+  width:0%; z-index:9999;
+  box-shadow:0 0 8px var(--gold);
+  transition:width .08s linear;
+}
+
+/* ============================
+   INTRO SCREEN
+============================ */
+#intro {
+  position:fixed; inset:0; z-index:99000;
+  background:var(--void);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  overflow:hidden;
+  transition:opacity 0.5s ease;
+}
+#intro-canvas { position:absolute; inset:0; z-index:0; }
+.intro-inner {
+  position:relative; z-index:2;
+  display:flex; flex-direction:column;
+  align-items:center; gap:1.8rem;
+  text-align:center; padding:0 2rem;
+}
+.intro-crest-wrap {
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:0.3rem;
+}
+.intro-crest-svg {
+  width:160px; height:176px;
+  filter:drop-shadow(0 0 28px rgba(192,96,192,0.55))
+         drop-shadow(0 0 14px rgba(139,0,0,0.4));
+  animation:crestFloat 4s ease-in-out infinite;
+}
+@keyframes crestFloat {
+  0%,100%{transform:translateY(0) scale(1);}
+  50%{transform:translateY(-10px) scale(1.02);}
+}
+.nav-logo-img {
+  display:flex; align-items:center; justify-content:center;
+  filter:drop-shadow(0 0 6px rgba(192,96,192,0.5));
+  transition:filter 0.3s;
+}
+.nav-logo-img:hover {
+  filter:drop-shadow(0 0 10px rgba(255,215,0,0.6));
+}
+.nav-logo-gem {
+  width:34px; height:34px;
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+  background:var(--red);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 16px rgba(139,0,0,0.5);
+}
+.intro-title-wrap {
+  overflow:hidden; line-height:1;
+}
+.intro-title-wrap h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,6vw,4.5rem);
+  font-weight:900; color:var(--ink);
+  transform:translateY(110%);
+  transition:transform 0.9s cubic-bezier(0.22,1,0.36,1);
+}
+.intro-title-wrap h1.show { transform:translateY(0); }
+.intro-sub {
+  font-family:'DM Mono',monospace;
+  font-size:0.72rem; letter-spacing:0.28em;
+  text-transform:uppercase; color:var(--gold);
+  opacity:0; transition:opacity 0.7s ease;
+}
+.intro-sub.show { opacity:1; }
+.intro-btn {
+  padding:0.85rem 2.6rem;
+  border:1px solid rgba(255,215,0,0.35);
+  background:rgba(255,215,0,0.05);
+  color:var(--gold);
+  font-family:'DM Mono',monospace;
+  font-size:0.75rem; letter-spacing:0.2em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-radius:2px;
+  opacity:0; transform:translateY(16px);
+  transition:opacity 0.6s ease, transform 0.6s ease, background 0.25s, border-color 0.25s;
+  pointer-events:auto !important;
+  position:relative; z-index:10;
+}
+.intro-btn.show { opacity:1; transform:translateY(0); }
+.intro-btn:hover { background:rgba(255,215,0,0.12); border-color:var(--gold); }
+.intro-bar-wrap {
+  position:absolute; bottom:0; left:0; right:0;
+  height:2px; background:rgba(255,255,255,0.04);
+}
+#intro-bar {
+  height:100%; width:0%;
+  background:linear-gradient(90deg,var(--red),var(--gold));
+  box-shadow:0 0 8px var(--gold);
+  transition:width 0.04s linear;
+}
+
+/* ============================
+   NAV
+============================ */
+#nav {
+  position:fixed; top:0; left:0; right:0;
+  z-index:1000; padding:1.5rem 4rem;
+  display:flex; align-items:center;
+  justify-content:space-between;
+  transform:translateY(-100%);
+  transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),
+             background 0.35s, padding 0.35s;
+}
+#nav.ready { transform:translateY(0); }
+#nav.scrolled {
+  background:rgba(3,2,5,0.92);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+  padding:0.9rem 4rem;
+}
+[data-theme="light"] #nav.scrolled { background:rgba(250,246,240,0.92); }
+.nav-logo { display:flex; align-items:center; gap:0.7rem; text-decoration:none; }
+.nav-logo-gem {
+  width:34px; height:34px;
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+  background:var(--red);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 16px rgba(139,0,0,0.5);
+}
+.nav-logo-gem span { font-family:'Playfair Display',serif; font-size:0.9rem; font-weight:900; color:var(--gold); }
+.nav-logo-text { font-family:'Playfair Display',serif; font-size:1rem; font-weight:900; color:var(--ink); }
+.nav-links { display:flex; align-items:center; gap:2.2rem; }
+.nav-links a {
+  font-size:0.8rem; color:var(--ink2);
+  text-decoration:none; letter-spacing:0.04em;
+  transition:color 0.2s; position:relative;
+  pointer-events:auto;
+}
+.nav-links a:after {
+  content:''; position:absolute; bottom:-3px; left:0;
+  width:0; height:1px; background:var(--gold);
+  transition:width 0.28s ease;
+}
+.nav-links a:hover { color:var(--ink); }
+.nav-links a:hover:after { width:100%; }
+.nav-right { display:flex; align-items:center; gap:0.9rem; }
+.nav-theme {
+  width:36px; height:36px; border-radius:50%;
+  border:1px solid var(--line);
+  background:transparent; color:var(--ink);
+  font-size:0.9rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color 0.2s;
+}
+.nav-theme:hover { border-color:var(--gold); }
+.nav-apply {
+  padding:0.52rem 1.35rem;
+  background:var(--red); color:var(--gold);
+  font-size:0.78rem; font-weight:700;
+  letter-spacing:0.08em; text-transform:uppercase;
+  border:none; border-radius:2px;
+  text-decoration:none; cursor:pointer;
+  pointer-events:auto !important;
+  display:inline-block;
+  box-shadow:0 0 18px rgba(139,0,0,0.4);
+  transition:background 0.25s, box-shadow 0.25s, transform 0.2s;
+}
+.nav-apply:hover { background:var(--red2); transform:translateY(-1px); box-shadow:0 4px 28px rgba(139,0,0,0.55); }
+.nav-hamburger {
+  display:none; flex-direction:column; gap:5px;
+  background:none; border:none; cursor:pointer; padding:4px;
+}
+.nav-hamburger span { display:block; width:22px; height:2px; background:var(--ink); border-radius:2px; transition:all 0.3s; }
+@media(max-width:900px) {
+  .nav-links { display:none; }
+  .nav-hamburger { display:flex; }
+  #nav, #nav.scrolled { padding:1rem 1.5rem; }
+}
+
+/* ============================
+   MOBILE MENU
+============================ */
+#mob-menu {
+  position:fixed; inset:0; z-index:998;
+  background:rgba(3,2,5,0.98);
+  backdrop-filter:blur(20px);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:2.2rem;
+  transform:translateX(100%);
+  transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);
+  pointer-events:auto;
+}
+#mob-menu.open { transform:translateX(0); pointer-events:auto; }
+#mob-menu a, #mob-menu button { pointer-events:auto !important; }
+.mob-close {
+  position:absolute; top:1.5rem; right:1.5rem;
+  background:none; border:none; color:var(--ink);
+  font-size:1.6rem; cursor:pointer;
+}
+#mob-menu a {
+  font-family:'Playfair Display',serif;
+  font-size:2.2rem; font-weight:900;
+  color:var(--ink); text-decoration:none;
+  transition:color 0.2s;
+}
+#mob-menu a:hover { color:var(--gold); }
+
+/* ============================
+   HERO
+============================ */
+#hero {
+  position:relative; min-height:100vh;
+  display:flex; align-items:flex-end;
+  overflow:hidden; background:var(--void);
+  padding:0 4rem 6rem;
+}
+@media(max-width:700px) { #hero { padding:0 1.5rem 5rem; } }
+#hero-canvas { position:absolute; inset:0; z-index:0; pointer-events:none; }
+.hero-grid {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background-image:linear-gradient(rgba(255,215,0,0.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,215,0,0.018) 1px,transparent 1px);
+  background-size:70px 70px;
+}
+.hero-radial {
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 35%,rgba(3,2,5,0.9) 100%);
+}
+.hero-content {
+  position:relative; z-index:3;
+  max-width:760px;
+}
+.hero-eyebrow {
+  display:flex; align-items:center; gap:0.9rem;
+  font-family:'DM Mono',monospace;
+  font-size:0.68rem; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--gold);
+  margin-bottom:1.8rem;
+  opacity:0; transform:translateY(20px);
+}
+.hero-eyebrow::before { content:''; width:35px; height:1px; background:var(--gold); }
+.hero-h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3.5rem,10vw,9.5rem);
+  font-weight:900; line-height:0.9;
+  letter-spacing:-0.03em;
+}
+.hero-line { display:block; overflow:hidden; }
+.hero-line span { display:block; transform:translateY(110%); }
+.line-normal { color:var(--ink); }
+.line-gold { color:var(--gold); font-style:italic; }
+.line-outline {
+  -webkit-text-stroke:1.5px rgba(240,234,224,0.3);
+  color:transparent;
+}
+.hero-desc {
+  margin-top:2rem; max-width:480px;
+  font-size:1rem; color:var(--ink2);
+  line-height:1.8;
+  opacity:0; transform:translateY(20px);
+}
+.hero-btns {
+  display:flex; gap:1rem; flex-wrap:wrap;
+  margin-top:2.5rem;
+  opacity:0; transform:translateY(20px);
+}
+.btn-red {
+  padding:0.92rem 2.4rem;
+  background:linear-gradient(135deg,var(--red),#A00000);
+  color:var(--gold); font-size:0.85rem; font-weight:700;
+  letter-spacing:0.1em; text-transform:uppercase;
+  border:none; border-radius:2px; text-decoration:none;
+  display:inline-block; cursor:pointer;
+  box-shadow:0 0 32px rgba(139,0,0,0.5);
+  transition:transform 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.btn-red:hover { transform:translateY(-3px); box-shadow:0 8px 40px rgba(139,0,0,0.6); background:linear-gradient(135deg,var(--red2),#B00000); }
+.btn-outline-gold {
+  padding:0.92rem 2.4rem;
+  background:transparent;
+  border:1px solid rgba(255,215,0,0.2);
+  color:var(--ink); font-size:0.85rem;
+  letter-spacing:0.05em; border-radius:2px;
+  text-decoration:none; display:inline-block;
+  cursor:pointer;
+  transition:border-color 0.25s, color 0.25s, transform 0.25s;
+}
+.btn-outline-gold:hover { border-color:var(--gold); color:var(--gold); transform:translateY(-3px); }
+.hero-scroll {
+  position:absolute; right:4rem; bottom:5rem; z-index:3;
+  display:flex; flex-direction:column;
+  align-items:center; gap:0.7rem;
+  opacity:0;
+}
+.hero-scroll span {
+  font-family:'DM Mono',monospace; font-size:0.58rem;
+  letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--ink2); writing-mode:vertical-lr;
+}
+.hero-scroll-line {
+  width:1px; height:55px;
+  background:linear-gradient(180deg,var(--gold),transparent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine { 0%{height:0;opacity:1} 100%{height:55px;opacity:0} }
+
+/* ============================
+   NUMBERS STRIP
+============================ */
+#numbers {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px; background:var(--line);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+@media(max-width:700px){ #numbers{grid-template-columns:1fr 1fr;} }
+.num-block {
+  padding:3rem 2.5rem;
+  background:var(--void);
+  position:relative; overflow:hidden;
+  transition:background 0.3s;
+}
+.num-block:hover { background:rgba(139,0,0,0.07); }
+.num-block::before {
+  content:''; position:absolute; left:0; top:0;
+  width:3px; height:0; background:var(--red);
+  transition:height 0.4s ease;
+}
+.num-block:hover::before { height:100%; }
+.n-val {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,4.5vw,4.5rem);
+  font-weight:900; line-height:1;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.n-label { font-size:0.78rem; color:var(--ink2); margin-top:0.5rem; }
+
+/* ============================
+   GALAXY (Knowledge Universe)
+============================ */
+#galaxy {
+  min-height:100vh; position:relative;
+  background:var(--void); overflow:hidden;
+  display:flex; align-items:center;
+  justify-content:space-between;
+  gap:3rem; padding:6rem 4rem;
+  flex-wrap:wrap;
+}
+@media(max-width:900px){ #galaxy{flex-direction:column;} }
+@media(max-width:700px){ #galaxy{padding:5rem 1.5rem;} }
+#galaxy-canvas { position:absolute; inset:0; z-index:0; pointer-events:auto; cursor:none; }
+.galaxy-left { position:relative; z-index:3; max-width:400px; }
+.eyebrow {
+  display:flex; align-items:center; gap:0.8rem;
+  font-family:'DM Mono',monospace;
+  font-size:0.65rem; letter-spacing:0.2em;
+  text-transform:uppercase; margin-bottom:1.4rem;
+}
+.eyebrow::before { content:''; width:28px; height:1px; }
+.eyebrow.gold { color:var(--gold); }
+.eyebrow.gold::before { background:var(--gold); }
+.eyebrow.cyan { color:var(--cyan); }
+.eyebrow.cyan::before { background:var(--cyan); }
+.eyebrow.red { color:var(--red2); }
+.eyebrow.red::before { background:var(--red2); }
+.zone-h {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.5rem,5vw,4.8rem);
+  font-weight:900; line-height:1.05;
+  letter-spacing:-0.02em;
+}
+.zone-h em { color:var(--gold); font-style:italic; }
+.zone-h .cyan { color:var(--cyan); font-style:normal; }
+.zone-h .red { color:var(--red2); font-style:italic; }
+.zone-p {
+  font-size:0.9rem; color:var(--ink2);
+  line-height:1.8; margin-top:1rem;
+}
+.galaxy-panel {
+  position:relative; z-index:3;
+  width:100%; max-width:340px;
+  pointer-events:auto;
+}
+.g-info-box {
+  padding:2rem; border:1px solid rgba(255,215,0,0.12);
+  background:rgba(3,2,5,0.85);
+  backdrop-filter:blur(16px); border-radius:4px;
+  min-height:210px; transition:border-color 0.3s;
+}
+.g-info-box:hover { border-color:rgba(255,215,0,0.25); }
+.g-label { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; margin-bottom:0.7rem; }
+.g-name { font-family:'Playfair Display',serif; font-size:1.9rem; font-weight:900; color:var(--ink); margin-bottom:0.6rem; line-height:1.1; }
+.g-desc { font-size:0.82rem; color:var(--ink2); line-height:1.72; }
+.g-courses { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--cyan); margin-top:0.85rem; letter-spacing:0.05em; }
+
+/* ============================
+   HISTORY
+============================ */
+#history { background:var(--void); padding:6rem 0; }
+.history-header {
+  padding:0 4rem 5rem;
+  display:flex; align-items:flex-end;
+  justify-content:space-between; flex-wrap:wrap; gap:2rem;
+  border-bottom:1px solid var(--line);
+}
+@media(max-width:700px){ .history-header{padding:0 1.5rem 3rem;} }
+.history-header h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3rem,8vw,8rem);
+  font-weight:900; line-height:0.88; letter-spacing:-0.04em;
+}
+.history-header h2 .red { color:var(--red2); }
+.history-header p { max-width:340px; font-size:0.9rem; color:var(--ink2); line-height:1.75; }
+.h-scenes { display:flex; flex-direction:column; }
+.h-scene {
+  display:grid; grid-template-columns:1fr 1fr;
+  min-height:60vh; border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+@media(max-width:800px){
+  .h-scene{grid-template-columns:1fr;}
+  .h-scene .h-scene-vis{min-height:200px;}
+  .h-scene:nth-child(even) .h-scene-info{order:unset;}
+}
+.h-scene-vis { position:relative; overflow:hidden; min-height:300px; }
+.h-scene-vis svg { position:absolute; inset:0; width:100%; height:100%; }
+.h-scene-info {
+  padding:4.5rem; display:flex;
+  flex-direction:column; justify-content:center;
+  border-left:1px solid var(--line);
+}
+.h-scene:nth-child(even) .h-scene-info { order:-1; border-left:none; border-right:1px solid var(--line); }
+@media(max-width:800px){
+  .h-scene-info{padding:2.5rem 1.5rem; border-left:none!important; border-right:none!important; border-top:1px solid var(--line);}
+}
+.h-year-bg {
+  font-family:'Playfair Display',serif;
+  font-size:8rem; font-weight:900; line-height:1;
+  color:rgba(255,215,0,0.05); letter-spacing:-0.05em;
+  margin-bottom:-1.8rem; position:relative; z-index:0;
+}
+.h-bar { width:36px; height:2px; background:var(--red); margin-bottom:1.4rem; position:relative; z-index:1; }
+.h-title {
+  font-family:'Playfair Display',serif;
+  font-size:2rem; font-weight:700; color:var(--ink);
+  position:relative; z-index:1; margin-bottom:0.9rem;
+}
+.h-body { font-size:0.88rem; color:var(--ink2); line-height:1.82; position:relative; z-index:1; }
+
+/* ============================
+   PROGRAMS (editorial list)
+============================ */
+#programs {
+  background:rgba(139,0,0,0.03);
+  border-top:1px solid var(--rline);
+  border-bottom:1px solid var(--rline);
+}
+.prog-header {
+  padding:6rem 4rem 3rem;
+  display:flex; align-items:flex-end;
+  justify-content:space-between; flex-wrap:wrap; gap:2rem;
+}
+@media(max-width:700px){ .prog-header{padding:4rem 1.5rem 2.5rem;} }
+.prog-header h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,7vw,7rem);
+  font-weight:900; letter-spacing:-0.04em; line-height:0.88;
+}
+.prog-header h2 em { font-style:italic; color:var(--gold); }
+.prog-list { border-top:1px solid var(--line); }
+.prog-row {
+  display:grid; grid-template-columns:72px 1fr 64px;
+  align-items:center; gap:2rem;
+  padding:1.9rem 4rem;
+  border-bottom:1px solid var(--line);
+  cursor:pointer; position:relative; overflow:hidden;
+  transition:padding-left 0.4s cubic-bezier(0.23,1,0.32,1),
+             background 0.35s;
+}
+@media(max-width:700px){
+  .prog-row{padding:1.4rem 1.5rem; grid-template-columns:48px 1fr;}
+  .prog-icon-col{display:none;}
+}
+.prog-row::after {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:0; background:rgba(139,0,0,0.09);
+  transition:width 0.4s cubic-bezier(0.23,1,0.32,1);
+}
+.prog-row:hover { padding-left:5rem; background:rgba(139,0,0,0.04); }
+.prog-row:hover::after { width:100%; }
+@media(max-width:700px){ .prog-row:hover{padding-left:2rem;} }
+.prog-num {
+  font-family:'DM Mono',monospace; font-size:0.68rem;
+  color:rgba(255,215,0,0.22); letter-spacing:0.1em;
+  position:relative; z-index:1;
+  transition:color 0.3s;
+}
+.prog-row:hover .prog-num { color:var(--gold); }
+.prog-main { position:relative; z-index:1; }
+.prog-name {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.4rem,3vw,2.6rem); font-weight:700;
+  color:var(--ink); transition:color 0.3s;
+}
+.prog-row:hover .prog-name { color:var(--gold); }
+.prog-subs { font-size:0.76rem; color:var(--ink2); margin-top:0.2rem; transition:color 0.3s; }
+.prog-icon-col {
+  font-size:2rem; opacity:0.15;
+  position:relative; z-index:1;
+  transition:opacity 0.35s, transform 0.35s;
+  text-align:right;
+}
+.prog-row:hover .prog-icon-col { opacity:1; transform:scale(1.15) rotate(-6deg); }
+
+/* ============================
+   CAMPUS MAP
+============================ */
+#campus { background:var(--void); padding:7rem 4rem; }
+@media(max-width:700px){ #campus{padding:5rem 1.5rem;} }
+.campus-wrap {
+  max-width:1280px; margin:0 auto;
+  display:grid; grid-template-columns:1fr 400px;
+  gap:4rem; align-items:start;
+}
+@media(max-width:1000px){ .campus-wrap{grid-template-columns:1fr;} }
+.campus-map-box {
+  border:1px solid rgba(255,215,0,0.07);
+  border-radius:3px; overflow:hidden;
+  background:#07040f;
+  pointer-events:auto;
+}
+.campus-map-box svg {
+  pointer-events:auto;
+  display:block;
+}
+.map-bld {
+  cursor:pointer;
+  pointer-events:auto;
+}
+.campus-side { position:sticky; top:100px; }
+.campus-hdr { margin-bottom:1.5rem; }
+.campus-building-name {
+  font-family:'Playfair Display',serif;
+  font-size:2.2rem; font-weight:900;
+  color:var(--ink); line-height:1.1; margin-bottom:0.9rem;
+  transition:all 0.35s;
+}
+.campus-building-desc { font-size:0.86rem; color:var(--ink2); line-height:1.78; }
+.campus-stat-pill {
+  display:inline-flex; margin-top:1rem;
+  padding:0.35rem 0.9rem;
+  border:1px solid rgba(255,215,0,0.18);
+  background:rgba(255,215,0,0.05);
+  font-family:'DM Mono',monospace;
+  font-size:0.68rem; color:var(--gold);
+  letter-spacing:0.07em; border-radius:2px;
+  transition:all 0.35s;
+}
+.campus-btns { display:flex; flex-direction:column; gap:0.45rem; margin-top:1.8rem; }
+.campus-btn {
+  display:flex; align-items:center; gap:0.9rem;
+  padding:0.72rem 1rem; border-radius:2px;
+  border:1px solid transparent;
+  background:none; color:var(--ink2);
+  font-size:0.8rem; cursor:pointer;
+  transition:all 0.25s; text-align:left;
+}
+.campus-btn:hover, .campus-btn.act {
+  border-color:rgba(139,0,0,0.45);
+  color:var(--ink); background:rgba(139,0,0,0.08);
+}
+.campus-btn-ico { font-size:1.05rem; }
+.map-bld { cursor:pointer; }
+.map-bld rect {
+  fill:rgba(139,0,0,0.18);
+  stroke:rgba(139,0,0,0.38);
+  stroke-width:1.5;
+  transition:fill 0.2s, stroke 0.2s, stroke-width 0.2s;
+}
+.map-bld:hover rect, .map-bld.lit rect {
+  fill:rgba(255,215,0,0.16);
+  stroke:var(--gold); stroke-width:2.2;
+  filter:drop-shadow(0 0 6px rgba(255,215,0,0.35));
+}
+
+/* ============================
+   STUDENT LIFE
+============================ */
+#student-life { background:var(--void); overflow:hidden; }
+.life-top {
+  padding:7rem 4rem 4rem;
+  text-align:center;
+}
+@media(max-width:700px){ .life-top{padding:5rem 1.5rem 3rem;} }
+.life-top h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3rem,9vw,9rem);
+  font-weight:900; letter-spacing:-0.04em; line-height:0.88;
+}
+.life-top h2 span { color:var(--red2); }
+.life-grid { display:flex; flex-direction:column; }
+.life-row {
+  display:grid; grid-template-columns:1fr 1fr;
+  min-height:60vh; border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+@media(max-width:800px){
+  .life-row{grid-template-columns:1fr; min-height:auto;}
+  .life-row-vis{min-height:220px;}
+  .life-row:nth-child(even) .life-row-info{order:unset;}
+}
+.life-row-vis {
+  position:relative; overflow:hidden;
+  min-height:340px;
+}
+.life-row-vis svg { position:absolute; inset:0; width:100%; height:100%; }
+.life-row-info {
+  padding:4rem; display:flex;
+  flex-direction:column; justify-content:center;
+  border-left:1px solid var(--line);
+}
+.life-row:nth-child(even) .life-row-info { order:-1; border-left:none; border-right:1px solid var(--line); }
+@media(max-width:800px){
+  .life-row-info{padding:2.5rem 1.5rem; border-left:none!important; border-right:none!important; border-top:1px solid var(--line);}
+}
+.life-tag {
+  font-family:'DM Mono',monospace; font-size:0.62rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  margin-bottom:1rem;
+}
+.life-name {
+  font-family:'Playfair Display',serif;
+  font-size:2.4rem; font-weight:900; color:var(--ink);
+  margin-bottom:0.9rem; line-height:1.05;
+}
+.life-desc { font-size:0.87rem; color:var(--ink2); line-height:1.8; margin-bottom:1.2rem; }
+.life-chips { display:flex; flex-wrap:wrap; gap:0.45rem; }
+.life-chip {
+  padding:0.28rem 0.72rem; border-radius:2px;
+  border:1px solid rgba(255,215,0,0.12);
+  font-size:0.68rem; color:rgba(255,215,0,0.58);
+  letter-spacing:0.04em;
+}
+
+/* ============================
+   ALUMNI
+============================ */
+#alumni {
+  background:rgba(139,0,0,0.04);
+  border-top:1px solid var(--rline);
+  padding:8rem 4rem; position:relative; overflow:hidden;
+}
+@media(max-width:700px){ #alumni{padding:5rem 1.5rem;} }
+.alumni-watermark {
+  position:absolute; top:-3rem; right:-1rem;
+  font-family:'Playfair Display',serif;
+  font-size:26vw; font-weight:900;
+  color:rgba(139,0,0,0.04); pointer-events:none;
+  user-select:none; line-height:1; letter-spacing:-0.06em;
+}
+.alumni-layout {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:5rem; position:relative; z-index:1;
+}
+@media(max-width:900px){ .alumni-layout{grid-template-columns:1fr; gap:3.5rem;} }
+.alumni-left h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.5rem,5vw,5rem);
+  font-weight:900; line-height:0.92; letter-spacing:-0.03em;
+  margin-bottom:2rem;
+}
+.alumni-left h2 em { font-style:italic; color:var(--gold); }
+.alumni-stats { display:flex; flex-direction:column; gap:0px; margin-top:2.5rem; }
+.a-stat-row {
+  display:flex; align-items:center;
+  justify-content:space-between;
+  padding:1.4rem 0;
+  border-bottom:1px solid var(--line);
+}
+.a-stat-num {
+  font-family:'Playfair Display',serif;
+  font-size:3rem; font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.a-stat-label { font-size:0.8rem; color:var(--ink2); max-width:180px; text-align:right; line-height:1.5; }
+.alumni-profiles { display:flex; flex-direction:column; gap:2px; }
+.a-profile {
+  padding:1.8rem 2rem;
+  border:1px solid rgba(255,215,0,0.06);
+  background:rgba(3,2,5,0.55);
+  transition:border-color 0.3s, background 0.3s, transform 0.25s;
+  cursor:default;
+}
+.a-profile:hover {
+  border-color:rgba(139,0,0,0.35);
+  background:rgba(139,0,0,0.06);
+  transform:translateX(5px);
+}
+.a-ico { font-size:1.8rem; margin-bottom:0.8rem; }
+.a-quote {
+  font-family:'Playfair Display',serif;
+  font-size:0.95rem; font-style:italic;
+  color:rgba(240,234,224,0.65); line-height:1.7;
+  margin-bottom:0.9rem;
+}
+.a-name { font-size:0.88rem; font-weight:700; color:var(--ink); }
+.a-role { font-size:0.73rem; color:var(--gold); margin-top:0.1rem; }
+.a-batch {
+  display:inline-block; margin-top:0.55rem;
+  font-family:'DM Mono',monospace; font-size:0.6rem;
+  color:var(--ink2); padding:0.18rem 0.55rem;
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:2px;
+}
+
+/* ============================
+   GLOBAL
+============================ */
+#global { background:var(--void); padding:7rem 0; }
+.global-header { padding:0 4rem 4rem; }
+@media(max-width:700px){ .global-header{padding:0 1.5rem 3rem;} }
+.global-header h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3rem,8vw,8rem);
+  font-weight:900; letter-spacing:-0.04em; line-height:0.88;
+}
+.global-header h2 em { font-style:italic; color:var(--cyan); }
+.global-rows { display:flex; flex-direction:column; gap:1px; background:rgba(0,229,255,0.04); }
+.g-row {
+  display:grid; grid-template-columns:220px 1fr;
+  background:var(--void); border-top:1px solid rgba(0,229,255,0.05);
+  min-height:160px; overflow:hidden;
+  transition:background 0.3s;
+}
+@media(max-width:700px){ .g-row{grid-template-columns:60px 1fr;} }
+.g-row:hover { background:rgba(0,229,255,0.018); }
+.g-num {
+  padding:3rem 2.5rem;
+  border-right:1px solid rgba(0,229,255,0.05);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:5.5rem; font-weight:900;
+  color:rgba(0,229,255,0.05);
+  transition:color 0.3s;
+}
+@media(max-width:700px){ .g-num{padding:2rem 1rem; font-size:2.5rem;} }
+.g-row:hover .g-num { color:rgba(0,229,255,0.14); }
+.g-content { padding:3rem; display:flex; flex-direction:column; justify-content:center; }
+@media(max-width:700px){ .g-content{padding:2rem 1.5rem;} }
+.g-lbl {
+  font-family:'DM Mono',monospace; font-size:0.6rem;
+  letter-spacing:0.2em; color:var(--cyan);
+  text-transform:uppercase; margin-bottom:0.7rem;
+}
+.g-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.75rem; font-weight:700; color:var(--ink); margin-bottom:0.6rem;
+}
+.g-desc { font-size:0.84rem; color:var(--ink2); line-height:1.72; max-width:580px; }
+.g-tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.9rem; }
+.g-tag {
+  padding:0.2rem 0.65rem; font-size:0.62rem;
+  border:1px solid rgba(0,229,255,0.14);
+  color:rgba(0,229,255,0.55); border-radius:2px;
+}
+
+/* ============================
+   ADMISSIONS
+============================ */
+#admissions {
+  background:var(--void);
+  border-top:1px solid var(--rline);
+  padding:8rem 4rem; position:relative; overflow:hidden;
+}
+@media(max-width:700px){ #admissions{padding:5rem 1.5rem;} }
+.adm-bg-year {
+  position:absolute; right:-2rem; top:50%; transform:translateY(-50%);
+  font-family:'Playfair Display',serif;
+  font-size:28vw; font-weight:900; line-height:1;
+  color:rgba(139,0,0,0.04); pointer-events:none;
+  letter-spacing:-0.08em; user-select:none;
+}
+.adm-layout {
+  position:relative; z-index:1;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:5.5rem; align-items:start;
+}
+@media(max-width:900px){ .adm-layout{grid-template-columns:1fr; gap:3.5rem;} }
+.adm-left h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,5.5vw,5.5rem);
+  font-weight:900; line-height:0.92;
+  letter-spacing:-0.03em; margin-bottom:1.4rem;
+}
+.adm-left h2 em { font-style:italic; color:var(--gold); }
+.adm-left p { font-size:0.9rem; color:var(--ink2); line-height:1.8; margin-bottom:2.2rem; max-width:420px; }
+.adm-steps { display:flex; flex-direction:column; gap:1px; }
+.adm-step {
+  display:flex; align-items:flex-start; gap:1.4rem;
+  padding:1.4rem 1.5rem;
+  border:1px solid rgba(255,215,0,0.06);
+  background:rgba(3,2,5,0.45);
+  transition:border-color 0.3s, background 0.3s, transform 0.25s;
+  cursor:default;
+}
+.adm-step:hover { border-color:rgba(255,215,0,0.2); background:rgba(255,215,0,0.025); transform:translateX(4px); }
+.adm-step-n {
+  font-family:'DM Mono',monospace; font-size:0.62rem;
+  color:rgba(255,215,0,0.25); letter-spacing:0.1em;
+  margin-top:0.2rem; min-width:28px;
+  transition:color 0.3s;
+}
+.adm-step:hover .adm-step-n { color:var(--gold); }
+.adm-step-title { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--ink); margin-bottom:0.25rem; }
+.adm-step-desc { font-size:0.78rem; color:var(--ink2); line-height:1.65; }
+.adm-progs { display:flex; flex-direction:column; gap:0.5rem; }
+.adm-prog {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.2rem 1.5rem;
+  border:1px solid rgba(139,0,0,0.14);
+  background:rgba(139,0,0,0.04);
+  transition:border-color 0.3s, background 0.3s, transform 0.25s;
+  cursor:default;
+}
+.adm-prog:hover { border-color:rgba(255,215,0,0.25); background:rgba(255,215,0,0.03); transform:translateX(6px); }
+.adm-prog-left { display:flex; align-items:center; gap:1rem; }
+.adm-prog-ico { font-size:1.3rem; }
+.adm-prog-name { font-family:'Playfair Display',serif; font-size:0.98rem; font-weight:700; color:var(--ink); }
+.adm-prog-sub { font-size:0.7rem; color:var(--ink2); margin-top:0.1rem; }
+.adm-prog-right { display:flex; align-items:center; gap:0.75rem; }
+.adm-prog-badge {
+  font-family:'DM Mono',monospace; font-size:0.6rem;
+  color:var(--gold); padding:0.18rem 0.55rem;
+  border:1px solid rgba(255,215,0,0.18);
+}
+.adm-prog-arr { color:rgba(255,215,0,0.3); font-size:1rem; transition:color 0.25s, transform 0.25s; }
+.adm-prog:hover .adm-prog-arr { color:var(--gold); transform:translateX(4px); }
+
+/* ============================
+   CONTACT
+============================ */
+#contact {
+  background:var(--void2);
+  border-top:1px solid var(--line);
+  padding:8rem 4rem;
+}
+@media(max-width:700px){ #contact{padding:5rem 1.5rem;} }
+.contact-layout {
+  max-width:1280px; margin:0 auto;
+  display:grid; grid-template-columns:1fr 1.3fr;
+  gap:5rem; align-items:start;
+}
+@media(max-width:900px){ .contact-layout{grid-template-columns:1fr; gap:3.5rem;} }
+.contact-left h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.5rem,5vw,5rem);
+  font-weight:900; line-height:0.9; letter-spacing:-0.03em;
+  margin-bottom:1.2rem;
+}
+.contact-left h2 em { font-style:italic; color:var(--red2); }
+.contact-left p { font-size:0.88rem; color:var(--ink2); line-height:1.8; margin-bottom:2.2rem; }
+.c-info-list { display:flex; flex-direction:column; gap:0px; }
+.c-info-row {
+  display:flex; align-items:flex-start; gap:1rem;
+  padding:1.2rem 0;
+  border-bottom:1px solid var(--line);
+  transition:padding-left 0.25s;
+}
+.c-info-row:hover { padding-left:0.5rem; }
+.c-info-ico {
+  width:36px; height:36px; border-radius:2px;
+  border:1px solid rgba(139,0,0,0.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.95rem; flex-shrink:0; color:var(--gold);
+}
+.c-info-label { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold); margin-bottom:0.22rem; }
+.c-info-val { font-size:0.83rem; color:var(--ink2); line-height:1.5; }
+.c-map-wrap {
+  margin-top:1.5rem; border-radius:2px; overflow:hidden;
+  border:1px solid var(--line);
+}
+.c-form {
+  background:rgba(255,215,0,0.018);
+  border:1px solid rgba(255,215,0,0.08);
+  padding:2.8rem; border-radius:2px;
+}
+.c-form h3 {
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem; font-weight:700; color:var(--ink);
+  margin-bottom:2rem;
+}
+.c-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+@media(max-width:500px){ .c-row{grid-template-columns:1fr;} }
+.c-group { margin-bottom:0.95rem; }
+.c-group label {
+  display:block; font-family:'DM Mono',monospace;
+  font-size:0.58rem; letter-spacing:0.15em; text-transform:uppercase;
+  color:rgba(255,215,0,0.4); margin-bottom:0.45rem;
+}
+.c-group input, .c-group textarea, .c-group select {
+  width:100%; padding:0.82rem 0.95rem;
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,215,0,0.07);
+  border-radius:2px; color:var(--ink);
+  font-family:'Space Grotesk',sans-serif; font-size:0.86rem;
+  outline:none;
+  transition:border-color 0.25s, background 0.25s;
+  pointer-events:auto !important;
+  cursor:text;
+}
+[data-theme="light"] .c-group input,
+[data-theme="light"] .c-group textarea,
+[data-theme="light"] .c-group select {
+  background:rgba(139,0,0,0.02);
+  border-color:rgba(139,0,0,0.08);
+  color:var(--ink);
+}
+.c-group input::placeholder,
+.c-group textarea::placeholder { color:var(--ink2); }
+.c-group input:focus, .c-group textarea:focus {
+  border-color:rgba(255,215,0,0.28);
+  background:rgba(255,215,0,0.025);
+}
+.c-group textarea { resize:vertical; min-height:95px; }
+.c-submit {
+  width:100%; padding:0.95rem;
+  background:linear-gradient(135deg,var(--red),#A00000);
+  color:var(--gold); font-size:0.85rem; font-weight:700;
+  letter-spacing:0.12em; text-transform:uppercase;
+  border:none; border-radius:2px; cursor:pointer;
+  pointer-events:auto !important;
+  box-shadow:0 0 25px rgba(139,0,0,0.35);
+  transition:transform 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.c-submit:hover { transform:translateY(-2px); box-shadow:0 6px 35px rgba(139,0,0,0.5); background:linear-gradient(135deg,var(--red2),#B00000); }
+
+/* ============================
+   FOOTER
+============================ */
+footer {
+  background:var(--void);
+  border-top:1px solid var(--line);
+  padding:4rem;
+}
+@media(max-width:700px){ footer{padding:3rem 1.5rem;} }
+.ft {
+  display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;
+  gap:3rem; margin-bottom:4rem;
+}
+@media(max-width:1000px){ .ft{grid-template-columns:1fr 1fr 1fr;} }
+@media(max-width:600px){ .ft{grid-template-columns:1fr 1fr;} }
+.ft-brand p { font-size:0.8rem; color:var(--ink2); line-height:1.7; margin-top:0.7rem; max-width:220px; }
+.ft-naac {
+  display:inline-flex; margin-top:1.2rem;
+  padding:0.32rem 0.85rem;
+  border:1px solid rgba(255,215,0,0.18);
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem; color:var(--gold); letter-spacing:0.1em;
+}
+.ft-col h4 {
+  font-family:'DM Mono',monospace; font-size:0.58rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:1.1rem;
+}
+.ft-col a {
+  display:block; font-size:0.8rem;
+  color:var(--ink2); text-decoration:none;
+  margin-bottom:0.52rem;
+  transition:color 0.22s;
+}
+.ft-col a:hover { color:var(--ink); }
+.ft-bottom {
+  display:flex; align-items:center;
+  justify-content:space-between; flex-wrap:wrap; gap:1rem;
+  padding-top:2rem; border-top:1px solid var(--line);
+}
+.ft-copy { font-size:0.75rem; color:rgba(240,234,224,0.22); }
+.ft-links { display:flex; gap:1.5rem; }
+.ft-links a { font-size:0.73rem; color:rgba(240,234,224,0.2); text-decoration:none; transition:color 0.2s; }
+.ft-links a:hover { color:var(--ink2); }
+
+/* ============================
+   ANIMATIONS
+============================ */
+.reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity:1; transform:translateY(0); }
+.reveal-left { opacity:0; transform:translateX(-35px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.reveal-left.in { opacity:1; transform:translateX(0); }
+.reveal-right { opacity:0; transform:translateX(35px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.reveal-right.in { opacity:1; transform:translateX(0); }
+
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
+  .reveal, .reveal-left, .reveal-right { opacity:1!important; transform:none!important; }
+}
+
+/* Hero floating crest */
+.hero-crest-float {
+  position:absolute;
+  right:5%;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:3;
+  opacity:0;
+  animation:heroCrestanim 6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes heroCrestanim {
+  0%,100%{transform:translateY(calc(-50% + 0px));}
+  50%{transform:translateY(calc(-50% - 14px));}
+}
+@media(max-width:1100px){ .hero-crest-float{right:2%; width:140px;} }
+@media(max-width:800px){ .hero-crest-float{display:none;} }
+
+</style>
+</head>
+<body>
+
+<!-- CURSOR (positioned outside everything so z-index works) -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- SCROLL PROGRESS -->
+<div id="spbar"></div>
+
+<!-- MOBILE MENU -->
+<div id="mob-menu">
+  <button class="mob-close" onclick="closeMob()">✕</button>
+  <a href="#history" onclick="closeMob()">Story</a>
+  <a href="#programs" onclick="closeMob()">Programs</a>
+  <a href="#campus" onclick="closeMob()">Campus</a>
+  <a href="#galaxy" onclick="closeMob()">Departments</a>
+  <a href="#student-life" onclick="closeMob()">Life</a>
+  <a href="#alumni" onclick="closeMob()">Alumni</a>
+  <a href="#admissions" onclick="closeMob()">Admissions</a>
+  <a href="#contact" onclick="closeMob()">Contact</a>
+</div>
+
+<!-- ===================== INTRO ===================== -->
+<div id="intro">
+  <canvas id="intro-canvas" style="position:absolute;inset:0;z-index:0;pointer-events:none;"></canvas>
+  <div class="intro-inner" style="position:relative;z-index:5;">
+    <div class="intro-crest-wrap">
+    <svg class="intro-crest-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shieldBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5B9BD5"/>
+      <stop offset="100%" stop-color="#2E75B6"/>
+    </linearGradient>
+    <linearGradient id="shieldTL" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7EC8E3"/>
+      <stop offset="100%" stop-color="#5BAFD6"/>
+    </linearGradient>
+    <linearGradient id="shieldTR" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A8D8EA"/>
+      <stop offset="100%" stop-color="#7EC8E3"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Outer purple/pink shield border (glow) -->
+  <path d="M100 8 L188 30 L188 120 Q188 185 100 210 Q12 185 12 120 L12 30 Z"
+    fill="#C060C0" stroke="#E080E0" stroke-width="2" opacity="0.9"/>
+
+  <!-- White separator ring -->
+  <path d="M100 12 L184 33 L184 120 Q184 182 100 206 Q16 182 16 120 L16 33 Z"
+    fill="white" stroke="white" stroke-width="1"/>
+
+  <!-- Main shield body - blue -->
+  <path d="M100 16 L180 36 L180 120 Q180 179 100 202 Q20 179 20 120 L20 36 Z"
+    fill="url(#shieldBlue)"/>
+
+  <!-- Dividing cross lines -->
+  <line x1="100" y1="16" x2="100" y2="202" stroke="white" stroke-width="2.5" opacity="0.9"/>
+  <line x1="20" y1="109" x2="180" y2="109" stroke="white" stroke-width="2.5" opacity="0.9"/>
+
+  <!-- TOP LEFT quadrant - Pen/Quill & Book -->
+  <g transform="translate(24,20)">
+    <!-- Book -->
+    <rect x="8" y="58" width="28" height="20" rx="1" fill="#8B4513" stroke="#5a2d0c" stroke-width="0.8"/>
+    <rect x="8" y="58" width="14" height="20" fill="#A0522D"/>
+    <line x1="22" y1="58" x2="22" y2="78" stroke="#5a2d0c" stroke-width="0.8"/>
+    <!-- Quill pen - red -->
+    <path d="M30 20 Q38 35 22 55 Q18 58 16 60 Q20 52 28 42 Q18 48 14 60 Q22 42 30 20Z"
+      fill="#CC2200" stroke="#990000" stroke-width="0.5"/>
+    <path d="M30 20 L32 25 Q26 38 22 55" fill="none" stroke="#FF4444" stroke-width="0.8"/>
+  </g>
+
+  <!-- TOP RIGHT quadrant - Crown -->
+  <g transform="translate(100,20)">
+    <!-- Crown base -->
+    <rect x="12" y="60" width="52" height="12" rx="2" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/>
+    <!-- Crown points -->
+    <path d="M16 60 L16 45 L22 55 L26 40 L32 55 L38 40 L44 55 L50 40 L56 55 L62 45 L62 60Z"
+      fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/>
+    <!-- Crown jewels -->
+    <circle cx="26" cy="50" r="2.5" fill="#FF0000"/>
+    <circle cx="38" cy="46" r="3" fill="#0000CC"/>
+    <circle cx="50" cy="50" r="2.5" fill="#00CC00"/>
+    <!-- Cross on top -->
+    <line x1="38" y1="36" x2="38" y2="44" stroke="#FFD700" stroke-width="2"/>
+    <line x1="34" y1="39" x2="42" y2="39" stroke="#FFD700" stroke-width="2"/>
+  </g>
+
+  <!-- BOTTOM LEFT quadrant - Sword, Boot, Lamp -->
+  <g transform="translate(22,112)">
+    <!-- Sword -->
+    <line x1="48" y1="10" x2="20" y2="78" stroke="#888" stroke-width="2.5"/>
+    <ellipse cx="48" cy="12" rx="5" ry="3" fill="#C0C0C0" stroke="#888" stroke-width="0.8"/>
+    <rect x="44" y="8" width="8" height="5" rx="1" fill="#B8860B"/>
+    <!-- Boot -->
+    <path d="M14 65 Q10 68 8 72 L8 82 L28 82 L28 72 Q24 70 22 65 L18 55 L14 65Z"
+      fill="#CC2200" stroke="#990000" stroke-width="0.8"/>
+    <!-- Oil lamp -->
+    <ellipse cx="55" cy="72" rx="10" ry="5" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/>
+    <path d="M50 67 Q55 60 60 67" fill="none" stroke="#B8860B" stroke-width="1"/>
+    <path d="M55 60 Q54 52 55 48 Q56 52 57 60" fill="#FF8800" stroke="none"/>
+  </g>
+
+  <!-- BOTTOM RIGHT quadrant - Open book / torch -->
+  <g transform="translate(104,112)">
+    <!-- Open book -->
+    <path d="M10 45 Q30 35 50 45 L50 78 Q30 68 10 78 Z"
+      fill="#F5DEB3" stroke="#8B4513" stroke-width="0.8"/>
+    <line x1="30" y1="38" x2="30" y2="78" stroke="#8B4513" stroke-width="1.2"/>
+    <!-- Lines of text on left page -->
+    <line x1="14" y1="52" x2="27" y2="48" stroke="#555" stroke-width="0.8"/>
+    <line x1="14" y1="58" x2="27" y2="54" stroke="#555" stroke-width="0.8"/>
+    <line x1="14" y1="64" x2="27" y2="60" stroke="#555" stroke-width="0.8"/>
+    <!-- Lines of text on right page -->
+    <line x1="33" y1="48" x2="46" y2="52" stroke="#555" stroke-width="0.8"/>
+    <line x1="33" y1="54" x2="46" y2="58" stroke="#555" stroke-width="0.8"/>
+    <line x1="33" y1="60" x2="46" y2="64" stroke="#555" stroke-width="0.8"/>
+    <!-- Small flame above -->
+    <path d="M30 30 Q28 22 30 16 Q32 22 34 30 Q32 28 30 30Z" fill="#FF4400" stroke="none"/>
+  </g>
+
+  <!-- Green laurel wreath at bottom -->
+  <!-- Left branch -->
+  <g fill="#2E7D32" stroke="#1B5E20" stroke-width="0.5">
+    <ellipse cx="36" cy="205" rx="9" ry="5" transform="rotate(-40 36 205)"/>
+    <ellipse cx="46" cy="210" rx="9" ry="5" transform="rotate(-30 46 210)"/>
+    <ellipse cx="57" cy="213" rx="9" ry="5" transform="rotate(-18 57 213)"/>
+    <ellipse cx="70" cy="215" rx="9" ry="5" transform="rotate(-8 70 215)"/>
+    <ellipse cx="83" cy="216" rx="9" ry="5" transform="rotate(-2 83 216)"/>
+  </g>
+  <!-- Right branch -->
+  <g fill="#2E7D32" stroke="#1B5E20" stroke-width="0.5">
+    <ellipse cx="164" cy="205" rx="9" ry="5" transform="rotate(40 164 205)"/>
+    <ellipse cx="154" cy="210" rx="9" ry="5" transform="rotate(30 154 210)"/>
+    <ellipse cx="143" cy="213" rx="9" ry="5" transform="rotate(18 143 213)"/>
+    <ellipse cx="130" cy="215" rx="9" ry="5" transform="rotate(8 130 215)"/>
+    <ellipse cx="117" cy="216" rx="9" ry="5" transform="rotate(2 117 216)"/>
+  </g>
+
+  <!-- Motto ribbon/banner -->
+  <path d="M30 208 Q100 220 170 208 Q162 218 100 222 Q38 218 30 208Z"
+    fill="#CC2200" stroke="#990000" stroke-width="0.8"/>
+  <path d="M24 206 Q20 200 26 210 Q28 216 34 214 L30 208 Z"
+    fill="#990000"/>
+  <path d="M176 206 Q180 200 174 210 Q172 216 166 214 L170 208 Z"
+    fill="#990000"/>
+  <text x="100" y="217" text-anchor="middle"
+    font-family="serif" font-size="6" font-weight="600"
+    fill="#FFD700" letter-spacing="0.5">To Find Life More Abundantly</text>
+</svg>
+  </div>
+    <div class="intro-title-wrap">
+      <h1 id="intro-h1">Ethiraj College for Women</h1>
+    </div>
+    <div class="intro-sub" id="intro-sub">— Empowering Women Since 1948 —</div>
+    <button class="intro-btn" id="intro-btn" onclick="launchSite()">Enter the Universe</button>
+  </div>
+  <div class="intro-bar-wrap"><div id="intro-bar"></div></div>
+</div>
+
+<!-- ===================== MAIN ===================== -->
+<div id="main-site" style="opacity:0;pointer-events:none;transition:opacity 0.4s ease;">
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-img"><svg viewBox="0 0 200 220" width="34" height="37" xmlns="http://www.w3.org/2000/svg">
+  <path d="M100 8 L188 30 L188 120 Q188 185 100 210 Q12 185 12 120 L12 30 Z" fill="#C060C0" stroke="#E080E0" stroke-width="2" opacity="0.9"/>
+  <path d="M100 12 L184 33 L184 120 Q184 182 100 206 Q16 182 16 120 L16 33 Z" fill="white"/>
+  <path d="M100 16 L180 36 L180 120 Q180 179 100 202 Q20 179 20 120 L20 36 Z" fill="#5B9BD5"/>
+  <line x1="100" y1="16" x2="100" y2="202" stroke="white" stroke-width="2.5"/>
+  <line x1="20" y1="109" x2="180" y2="109" stroke="white" stroke-width="2.5"/>
+  <g transform="translate(24,20)"><path d="M30 20 Q38 35 22 55 Q18 58 16 60 Q20 52 28 42 Q18 48 14 60 Q22 42 30 20Z" fill="#CC2200" stroke="#990000" stroke-width="0.5"/></g>
+  <g transform="translate(100,20)"><rect x="12" y="60" width="52" height="12" rx="2" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/><path d="M16 60 L16 45 L22 55 L26 40 L32 55 L38 40 L44 55 L50 40 L56 55 L62 45 L62 60Z" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/></g>
+  <g fill="#2E7D32"><ellipse cx="46" cy="210" rx="9" ry="5" transform="rotate(-30 46 210)"/><ellipse cx="70" cy="215" rx="9" ry="5" transform="rotate(-8 70 215)"/><ellipse cx="130" cy="215" rx="9" ry="5" transform="rotate(8 130 215)"/><ellipse cx="154" cy="210" rx="9" ry="5" transform="rotate(30 154 210)"/></g>
+  <path d="M30 208 Q100 220 170 208 Q162 218 100 222 Q38 218 30 208Z" fill="#CC2200"/>
+  <text x="100" y="217" text-anchor="middle" font-family="serif" font-size="5.5" fill="#FFD700" letter-spacing="0.3">To Find Life More Abundantly</text>
+</svg></div>
+    <span class="nav-logo-text">Ethiraj</span>
+  </a>
+  <div class="nav-links">
+    <a href="#history">Story</a>
+    <a href="#programs">Programs</a>
+    <a href="#galaxy">Departments</a>
+    <a href="#campus">Campus</a>
+    <a href="#student-life">Life</a>
+    <a href="#alumni">Alumni</a>
+    <a href="#admissions">Admissions</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-theme" id="theme-btn" onclick="toggleTheme()">☀</button>
+    <a href="#admissions" class="nav-apply">Apply Now</a>
+    <button class="nav-hamburger" onclick="openMob()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-grid"></div>
+  <div class="hero-radial"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow" id="he">Digital Knowledge Universe &nbsp;·&nbsp; Est. 1948 &nbsp;·&nbsp; Chennai</div>
+    <h1 class="hero-h1">
+      <span class="hero-line line-normal"><span id="hl1">Ethiraj</span></span>
+      <span class="hero-line line-gold"><span id="hl2">College</span></span>
+      <span class="hero-line line-outline"><span id="hl3">for Women</span></span>
+    </h1>
+    <p class="hero-desc" id="hdesc">
+      Bold. Brilliant. Unstoppable.<br/>
+      A premier autonomous institution in Chennai empowering women through rigorous academics,
+      cutting-edge research, and a culture of fearless ambition — since 1948.
+    </p>
+    <div class="hero-btns" id="hbtns">
+      <a href="#galaxy" class="btn-red">Explore Universe</a>
+      <a href="#history" class="btn-outline-gold">Our Story</a>
+    </div>
+  </div>
+  <!-- Floating crest in hero -->
+  <div class="hero-crest-float" id="hero-crest-float">
+    <svg viewBox="0 0 200 220" width="180" height="198" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 30px rgba(192,96,192,0.4)) drop-shadow(0 0 60px rgba(139,0,0,0.25));">
+      <path d="M100 8 L188 30 L188 120 Q188 185 100 210 Q12 185 12 120 L12 30 Z" fill="#C060C0" stroke="#E080E0" stroke-width="2" opacity="0.88"/>
+      <path d="M100 12 L184 33 L184 120 Q184 182 100 206 Q16 182 16 120 L16 33 Z" fill="white"/>
+      <path d="M100 16 L180 36 L180 120 Q180 179 100 202 Q20 179 20 120 L20 36 Z" fill="url(#hsblu)"/>
+      <defs>
+        <linearGradient id="hsblu" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#6AAED6"/><stop offset="100%" stop-color="#2E75B6"/>
+        </linearGradient>
+      </defs>
+      <line x1="100" y1="16" x2="100" y2="202" stroke="white" stroke-width="2.5"/>
+      <line x1="20" y1="109" x2="180" y2="109" stroke="white" stroke-width="2.5"/>
+      <!-- TL: Quill pen -->
+      <g transform="translate(24,22)">
+        <path d="M30 18 Q40 32 24 54 Q20 58 16 60 Q22 50 30 40 Q20 46 14 60 Q22 40 30 18Z" fill="#CC2200" stroke="#990000" stroke-width="0.5"/>
+        <path d="M30 18 L33 24 Q27 36 22 54" fill="none" stroke="#FF5555" stroke-width="0.8"/>
+        <rect x="8" y="58" width="28" height="20" rx="1" fill="#8B4513" stroke="#5a2d0c" stroke-width="0.8"/>
+        <rect x="8" y="58" width="14" height="20" fill="#A0522D"/><line x1="22" y1="58" x2="22" y2="78" stroke="#5a2d0c" stroke-width="0.8"/>
+      </g>
+      <!-- TR: Crown -->
+      <g transform="translate(104,22)">
+        <rect x="10" y="60" width="52" height="11" rx="2" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/>
+        <path d="M14 60 L14 46 L20 56 L25 40 L32 55 L38 40 L45 55 L52 40 L58 56 L64 46 L64 60Z" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/>
+        <circle cx="25" cy="50" r="2.5" fill="#FF0000"/>
+        <circle cx="38" cy="46" r="3" fill="#0044CC"/>
+        <circle cx="51" cy="50" r="2.5" fill="#00AA00"/>
+        <line x1="38" y1="36" x2="38" y2="43" stroke="#FFD700" stroke-width="2"/>
+        <line x1="34" y1="39" x2="42" y2="39" stroke="#FFD700" stroke-width="2"/>
+      </g>
+      <!-- BL: Sword + Boot + Flame -->
+      <g transform="translate(22,112)">
+        <line x1="50" y1="8" x2="18" y2="78" stroke="#A0A0A0" stroke-width="2.5"/>
+        <ellipse cx="50" cy="10" rx="5" ry="3" fill="#C0C0C0" stroke="#888" stroke-width="0.8"/>
+        <rect x="46" y="7" width="8" height="5" rx="1" fill="#B8860B"/>
+        <path d="M14 62 Q10 66 8 70 L8 82 L28 82 L28 72 Q24 70 22 62 L18 52 L14 62Z" fill="#CC2200" stroke="#990000" stroke-width="0.8"/>
+        <ellipse cx="55" cy="72" rx="10" ry="5" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/>
+        <path d="M50 67 Q55 60 60 67" fill="none" stroke="#B8860B" stroke-width="0.8"/>
+        <path d="M55 60 Q54 52 55 47 Q56 52 57 60" fill="#FF8800"/>
+      </g>
+      <!-- BR: Open book -->
+      <g transform="translate(104,112)">
+        <path d="M10 44 Q30 34 52 44 L52 80 Q30 70 10 80 Z" fill="#F5DEB3" stroke="#8B4513" stroke-width="0.8"/>
+        <line x1="31" y1="37" x2="31" y2="80" stroke="#8B4513" stroke-width="1.2"/>
+        <line x1="14" y1="52" x2="28" y2="48" stroke="#777" stroke-width="0.7"/>
+        <line x1="14" y1="58" x2="28" y2="54" stroke="#777" stroke-width="0.7"/>
+        <line x1="14" y1="64" x2="28" y2="60" stroke="#777" stroke-width="0.7"/>
+        <line x1="34" y1="48" x2="48" y2="52" stroke="#777" stroke-width="0.7"/>
+        <line x1="34" y1="54" x2="48" y2="58" stroke="#777" stroke-width="0.7"/>
+        <line x1="34" y1="60" x2="48" y2="64" stroke="#777" stroke-width="0.7"/>
+        <path d="M31 28 Q29 20 31 14 Q33 20 35 28 Q33 26 31 28Z" fill="#FF4400"/>
+      </g>
+      <!-- Laurel wreath -->
+      <g fill="#2E7D32" stroke="#1B5E20" stroke-width="0.4">
+        <ellipse cx="36" cy="204" rx="9" ry="5" transform="rotate(-40 36 204)"/>
+        <ellipse cx="47" cy="210" rx="9" ry="5" transform="rotate(-28 47 210)"/>
+        <ellipse cx="59" cy="213" rx="9" ry="5" transform="rotate(-16 59 213)"/>
+        <ellipse cx="72" cy="215" rx="9" ry="5" transform="rotate(-6 72 215)"/>
+        <ellipse cx="86" cy="216" rx="9" ry="5" transform="rotate(-1 86 216)"/>
+        <ellipse cx="164" cy="204" rx="9" ry="5" transform="rotate(40 164 204)"/>
+        <ellipse cx="153" cy="210" rx="9" ry="5" transform="rotate(28 153 210)"/>
+        <ellipse cx="141" cy="213" rx="9" ry="5" transform="rotate(16 141 213)"/>
+        <ellipse cx="128" cy="215" rx="9" ry="5" transform="rotate(6 128 215)"/>
+        <ellipse cx="114" cy="216" rx="9" ry="5" transform="rotate(1 114 216)"/>
+      </g>
+      <!-- Motto banner -->
+      <path d="M28 207 Q100 220 172 207 Q164 218 100 222 Q36 218 28 207Z" fill="#CC2200" stroke="#990000" stroke-width="0.7"/>
+      <path d="M22 205 Q18 198 24 209 Q27 215 33 212 L28 207Z" fill="#880000"/>
+      <path d="M178 205 Q182 198 176 209 Q173 215 167 212 L172 207Z" fill="#880000"/>
+      <text x="100" y="216" text-anchor="middle" font-family="Georgia,serif" font-size="5.8" font-weight="600" fill="#FFD700" letter-spacing="0.4">To Find Life More Abundantly</text>
+    </svg>
+  </div>
+
+  <div class="hero-scroll" id="hscroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div id="numbers">
+  <div class="num-block reveal"><div class="n-val" data-t="75" data-s="+">0</div><div class="n-label">Years of Excellence</div></div>
+  <div class="num-block reveal" style="transition-delay:.1s"><div class="n-val" data-t="15000" data-s="+">0</div><div class="n-label">Alumni Worldwide</div></div>
+  <div class="num-block reveal" style="transition-delay:.2s"><div class="n-val" data-t="40" data-s="+">0</div><div class="n-label">Academic Programs</div></div>
+  <div class="num-block reveal" style="transition-delay:.3s"><div class="n-val" data-t="200" data-s="+">0</div><div class="n-label">Annual Events</div></div>
+</div>
+
+<!-- ===================== GALAXY ===================== -->
+<section id="galaxy">
+  <canvas id="galaxy-canvas"></canvas>
+  <div class="galaxy-left reveal-left">
+    <div class="eyebrow gold">Zone 01 · Knowledge Galaxy</div>
+    <h2 class="zone-h">Academic<br/><em>Disciplines</em></h2>
+    <p class="zone-p">Six departments, one unstoppable mission.<br/>Hover the orbiting planets to explore each academic world.</p>
+  </div>
+  <div class="galaxy-panel reveal-right">
+    <div class="g-info-box">
+      <div class="g-label">Department</div>
+      <div class="g-name" id="gn">Hover a planet</div>
+      <div class="g-desc" id="gd">Each department in the Ethiraj academic universe is a world of its own — rich with curriculum, research, and possibility. Six planets orbit the core of excellence.</div>
+      <div class="g-courses" id="gc">← Hover any planet to explore</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HISTORY ===================== -->
+<section id="history">
+  <div class="history-header">
+    <div class="reveal-left">
+      <div class="eyebrow red">Zone 02 · Legacy</div>
+      <h2>A Story<br/><span class="red">Seventy‑Five</span><br/>Years in the Making</h2>
+    </div>
+    <p class="reveal-right" style="max-width:340px;font-size:.88rem;color:var(--ink2);line-height:1.78;">
+      From a small institution in 1948 to a nationally acclaimed centre of learning —
+      each decade rewrote what an Ethiraj woman could become.
+    </p>
+  </div>
+  <div class="h-scenes" id="h-scenes"></div>
+</section>
+
+<!-- ===================== PROGRAMS ===================== -->
+<section id="programs">
+  <div class="prog-header">
+    <div class="reveal-left">
+      <div class="eyebrow gold">Zone 03 · Academics</div>
+      <h2>Six<br/><em>Worlds</em><br/>of Learning</h2>
+    </div>
+    <p class="reveal-right" style="max-width:280px;font-size:.88rem;color:var(--ink2);line-height:1.78;">NAAC A+ accredited pathways from undergraduate to doctoral — built for brilliance.</p>
+  </div>
+  <div class="prog-list" id="prog-list"></div>
+</section>
+
+<!-- ===================== CAMPUS ===================== -->
+<section id="campus">
+  <div style="text-align:center;margin-bottom:4rem;" class="reveal">
+    <div class="eyebrow gold" style="justify-content:center;">Zone 04 · Campus</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2.8rem,7vw,7rem);font-weight:900;letter-spacing:-0.04em;line-height:.88;">The <em style="color:var(--gold);font-style:italic">Physical</em> Universe</h2>
+  </div>
+  <div class="campus-wrap">
+    <div class="campus-map-box reveal-left">
+      <svg viewBox="0 0 540 440" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <rect width="540" height="440" fill="#07040f"/>
+        <defs>
+          <pattern id="mpg" width="18" height="18" patternUnits="userSpaceOnUse">
+            <path d="M18 0L0 0 0 18" fill="none" stroke="rgba(255,215,0,0.02)" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="540" height="440" fill="url(#mpg)"/>
+        <path d="M270 0L270 440" stroke="rgba(255,215,0,0.05)" stroke-width="7" fill="none"/>
+        <path d="M0 220L540 220" stroke="rgba(255,215,0,0.05)" stroke-width="7" fill="none"/>
+        <circle cx="460" cy="78" r="30" fill="rgba(0,80,20,0.14)" stroke="rgba(0,150,50,0.14)" stroke-width="1"/>
+        <circle cx="80" cy="362" r="24" fill="rgba(0,80,20,0.14)" stroke="rgba(0,150,50,0.14)" stroke-width="1"/>
+        <g class="map-bld" id="mb-academic" onclick="showBuilding('academic')">
+          <rect x="42" y="42" width="170" height="126" rx="4"/>
+          <text x="127" y="97" text-anchor="middle" fill="rgba(240,234,224,.8)" font-size="11" font-family="Space Grotesk" font-weight="600">Academic Block</text>
+          <text x="127" y="114" text-anchor="middle" fill="rgba(255,215,0,.55)" font-size="8.5" font-family="DM Mono">Main Building</text>
+        </g>
+        <g class="map-bld" id="mb-library" onclick="showBuilding('library')">
+          <rect x="285" y="42" width="128" height="108" rx="4"/>
+          <text x="349" y="91" text-anchor="middle" fill="rgba(240,234,224,.8)" font-size="11" font-family="Space Grotesk" font-weight="600">Library</text>
+          <text x="349" y="108" text-anchor="middle" fill="rgba(255,215,0,.55)" font-size="8.5" font-family="DM Mono">80,000+ Books</text>
+        </g>
+        <g class="map-bld" id="mb-aud" onclick="showBuilding('aud')">
+          <rect x="285" y="232" width="130" height="92" rx="4"/>
+          <text x="350" y="276" text-anchor="middle" fill="rgba(240,234,224,.8)" font-size="11" font-family="Space Grotesk" font-weight="600">Auditorium</text>
+          <text x="350" y="293" text-anchor="middle" fill="rgba(255,215,0,.55)" font-size="8.5" font-family="DM Mono">1500 Seats</text>
+        </g>
+        <g class="map-bld" id="mb-sports" onclick="showBuilding('sports')">
+          <rect x="42" y="248" width="188" height="82" rx="4"/>
+          <text x="136" y="286" text-anchor="middle" fill="rgba(240,234,224,.8)" font-size="11" font-family="Space Grotesk" font-weight="600">Sports Complex</text>
+          <text x="136" y="303" text-anchor="middle" fill="rgba(255,215,0,.55)" font-size="8.5" font-family="DM Mono">5-Acre Campus</text>
+        </g>
+        <g class="map-bld" id="mb-labs" onclick="showBuilding('labs')">
+          <rect x="42" y="354" width="170" height="65" rx="4"/>
+          <text x="127" y="383" text-anchor="middle" fill="rgba(240,234,224,.8)" font-size="11" font-family="Space Grotesk" font-weight="600">Laboratories</text>
+          <text x="127" y="400" text-anchor="middle" fill="rgba(255,215,0,.55)" font-size="8.5" font-family="DM Mono">15 Research Labs</text>
+        </g>
+        <g transform="translate(502,404)">
+          <circle r="16" fill="rgba(255,215,0,.05)" stroke="rgba(255,215,0,.18)" stroke-width="1"/>
+          <text x="0" y="-2" text-anchor="middle" fill="rgba(255,215,0,.55)" font-size="7" font-family="DM Mono" font-weight="700">N</text>
+          <line x1="0" y1="-11" x2="0" y2="0" stroke="rgba(255,215,0,.38)" stroke-width="1.5"/>
+        </g>
+      </svg>
+    </div>
+    <div class="campus-side reveal-right">
+      <div class="campus-hdr">
+        <div class="eyebrow cyan" id="bld-zone">Click a building</div>
+        <div class="campus-building-name" id="bld-name">Explore Our Campus</div>
+        <div class="campus-building-desc" id="bld-desc">Our campus in Egmore, Chennai is a world of possibility. Click any building on the map to discover what lies within each space.</div>
+        <div class="campus-stat-pill" id="bld-stat">Egmore, Chennai · Est. 1948</div>
+      </div>
+      <div class="campus-btns" id="campus-btns"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STUDENT LIFE ===================== -->
+<section id="student-life">
+  <div class="life-top reveal">
+    <div class="eyebrow gold" style="justify-content:center;">Zone 05 · Student Universe</div>
+    <h2>Life<br/>Beyond <span>Classrooms</span></h2>
+  </div>
+  <div class="life-grid" id="life-grid"></div>
+</section>
+
+<!-- ===================== ALUMNI ===================== -->
+<section id="alumni">
+  <div class="alumni-watermark">75</div>
+  <div class="alumni-layout">
+    <div class="alumni-left reveal-left">
+      <div class="eyebrow gold">Zone 06 · Legacy</div>
+      <h2>Alumni<br/><em>Around</em><br/>the Globe</h2>
+      <div class="alumni-stats" id="alumni-stats"></div>
+    </div>
+    <div class="alumni-profiles reveal-right" id="alumni-profiles"></div>
+  </div>
+</section>
+
+<!-- ===================== GLOBAL ===================== -->
+<section id="global">
+  <div class="global-header reveal">
+    <div class="eyebrow cyan">Zone 07 · Global Reach</div>
+    <h2>A World<br/>of <em>Opportunities</em></h2>
+  </div>
+  <div class="global-rows" id="global-rows"></div>
+</section>
+
+<!-- ===================== ADMISSIONS ===================== -->
+<section id="admissions">
+  <div class="adm-bg-year">2025</div>
+  <div class="adm-layout">
+    <div class="reveal-left">
+      <div class="eyebrow gold">Zone 08 · Admissions</div>
+      <h2>Begin Your<br/><em>Journey</em></h2>
+      <p>Applications open for 2025–26. Join thousands of women who chose Ethiraj as the launchpad for extraordinary lives.</p>
+      <div class="adm-steps" id="adm-steps"></div>
+    </div>
+    <div class="adm-progs reveal-right" id="adm-progs"></div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact">
+  <div class="contact-layout">
+    <div class="reveal-left">
+      <div class="eyebrow red">Zone 09 · Contact</div>
+      <h2>Find<br/><em>Ethiraj</em></h2>
+      <p>We are in the heart of Chennai, and the heart of everything we do is you.</p>
+      <div class="c-info-list" id="c-info"></div>
+      <div class="c-map-wrap">
+        <svg viewBox="0 0 320 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="150" fill="#07040f"/>
+          <defs><pattern id="cmpg" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0L0 0 0 14" fill="none" stroke="rgba(255,215,0,0.022)" stroke-width="1"/></pattern></defs>
+          <rect width="320" height="150" fill="url(#cmpg)"/>
+          <line x1="0" y1="75" x2="320" y2="75" stroke="rgba(255,215,0,0.06)" stroke-width="4"/>
+          <line x1="160" y1="0" x2="160" y2="150" stroke="rgba(255,215,0,0.04)" stroke-width="2.5"/>
+          <circle cx="160" cy="75" r="20" fill="rgba(139,0,0,0.22)" stroke="var(--red)" stroke-width="1.5"/>
+          <circle cx="160" cy="75" r="8" fill="var(--gold)"/>
+          <circle cx="160" cy="75" r="3.5" fill="var(--red)"/>
+          <circle cx="160" cy="75" r="28" fill="none" stroke="rgba(139,0,0,0.28)" stroke-width="1">
+            <animate attributeName="r" values="20;44;20" dur="2.8s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0;0.5" dur="2.8s" repeatCount="indefinite"/>
+          </circle>
+          <text x="160" y="116" text-anchor="middle" font-family="DM Mono" font-size="8.5" fill="rgba(255,215,0,0.48)" letter-spacing="2">ETHIRAJ COLLEGE · EGMORE</text>
+          <text x="160" y="132" text-anchor="middle" font-family="Space Grotesk" font-size="8" fill="rgba(240,234,224,0.2)">70, Ethiraj Salai — Chennai 600 008</text>
+        </svg>
+      </div>
+    </div>
+    <div class="c-form reveal-right">
+      <h3>Send a Message</h3>
+      <form onsubmit="submitForm(event)">
+        <div class="c-row">
+          <div class="c-group"><label>First Name</label><input type="text" placeholder="Priya" required/></div>
+          <div class="c-group"><label>Last Name</label><input type="text" placeholder="Sharma" required/></div>
+        </div>
+        <div class="c-group"><label>Email</label><input type="email" placeholder="priya@example.com" required/></div>
+        <div class="c-group"><label>Phone</label><input type="tel" placeholder="+91 98765 43210"/></div>
+        <div class="c-group">
+          <label>Enquiry Type</label>
+          <select>
+            <option>Admissions 2025–26</option>
+            <option>Campus Visit</option>
+            <option>Research Collaboration</option>
+            <option>Alumni Network</option>
+            <option>General Enquiry</option>
+          </select>
+        </div>
+        <div class="c-group"><label>Message</label><textarea placeholder="How can we help?" required></textarea></div>
+        <button type="submit" class="c-submit" id="cf-btn">Transmit Message ✦</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div class="ft-brand">
+      <div class="nav-logo" style="margin-bottom:.5rem">
+        <div class="nav-logo-img"><svg viewBox="0 0 200 220" width="34" height="37" xmlns="http://www.w3.org/2000/svg">
+  <path d="M100 8 L188 30 L188 120 Q188 185 100 210 Q12 185 12 120 L12 30 Z" fill="#C060C0" stroke="#E080E0" stroke-width="2" opacity="0.9"/>
+  <path d="M100 12 L184 33 L184 120 Q184 182 100 206 Q16 182 16 120 L16 33 Z" fill="white"/>
+  <path d="M100 16 L180 36 L180 120 Q180 179 100 202 Q20 179 20 120 L20 36 Z" fill="#5B9BD5"/>
+  <line x1="100" y1="16" x2="100" y2="202" stroke="white" stroke-width="2.5"/>
+  <line x1="20" y1="109" x2="180" y2="109" stroke="white" stroke-width="2.5"/>
+  <g transform="translate(24,20)"><path d="M30 20 Q38 35 22 55 Q18 58 16 60 Q20 52 28 42 Q18 48 14 60 Q22 42 30 20Z" fill="#CC2200" stroke="#990000" stroke-width="0.5"/></g>
+  <g transform="translate(100,20)"><rect x="12" y="60" width="52" height="12" rx="2" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/><path d="M16 60 L16 45 L22 55 L26 40 L32 55 L38 40 L44 55 L50 40 L56 55 L62 45 L62 60Z" fill="#FFD700" stroke="#B8860B" stroke-width="0.8"/></g>
+  <g fill="#2E7D32"><ellipse cx="46" cy="210" rx="9" ry="5" transform="rotate(-30 46 210)"/><ellipse cx="70" cy="215" rx="9" ry="5" transform="rotate(-8 70 215)"/><ellipse cx="130" cy="215" rx="9" ry="5" transform="rotate(8 130 215)"/><ellipse cx="154" cy="210" rx="9" ry="5" transform="rotate(30 154 210)"/></g>
+  <path d="M30 208 Q100 220 170 208 Q162 218 100 222 Q38 218 30 208Z" fill="#CC2200"/>
+  <text x="100" y="217" text-anchor="middle" font-family="serif" font-size="5.5" fill="#FFD700" letter-spacing="0.3">To Find Life More Abundantly</text>
+</svg></div>
+        <span class="nav-logo-text">Ethiraj College</span>
+      </div>
+      <p>Empowering women through education, innovation, and leadership since 1948.</p>
+      <div class="ft-naac">NAAC A+ Accredited</div>
+    </div>
+    <div class="ft-col"><h4>Academics</h4><a href="#">Programs</a><a href="#">Research</a><a href="#">Library</a><a href="#">Results</a></div>
+    <div class="ft-col"><h4>Campus</h4><a href="#">Facilities</a><a href="#">Sports</a><a href="#">Clubs</a><a href="#">Events</a></div>
+    <div class="ft-col"><h4>Admissions</h4><a href="#">UG</a><a href="#">PG</a><a href="#">Ph.D</a><a href="#">Scholarships</a></div>
+    <div class="ft-col"><h4>Connect</h4><a href="#">Alumni</a><a href="#">Industry</a><a href="#">Press</a><a href="#">Contact</a></div>
+  </div>
+  <div class="ft-bottom">
+    <div class="ft-copy">© 2024 Ethiraj College for Women, Chennai. All rights reserved.</div>
+    <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Sitemap</a></div>
+  </div>
+</footer>
+
+</div><!-- /main-site -->
+
+<script>
+/* ============================================================
+   DATA
+============================================================ */
+const GALAXY = [
+  {name:'Arts & Humanities',desc:'Language, history, culture, and society. Home to scholars of Tamil literature, English studies, and social thought.',courses:'English · Tamil · History · Philosophy · Sociology',color:'#FF6B6B',r:22},
+  {name:'Sciences',desc:'Laboratories, discoveries, and breakthroughs. Molecular biology to quantum physics — Ethiraj\'s science wing fuels national research.',courses:'Physics · Chemistry · Botany · Biotech · Zoology',color:'#00D4FF',r:28},
+  {name:'Commerce',desc:'Markets, money, and enterprise. Producing chartered accountants, bankers, and financial leaders for India and the world.',courses:'B.Com · M.Com · Finance · Accounting · Banking',color:'#FFD700',r:20},
+  {name:'Computer Science',desc:'Code, data, intelligence. Where the digital future is written. AI, cybersecurity, and real-world software development.',courses:'BCA · MCA · AI/ML · Data Science · Cyber Security',color:'#00FF88',r:24},
+  {name:'Media Studies',desc:'The art and science of storytelling. Journalists, filmmakers, and advertising strategists begin here.',courses:'Journalism · Mass Comm · PR · Visual Media',color:'#FF9F43',r:18},
+  {name:'Business Administration',desc:'Entrepreneurs and executives. The MBA programme places graduates in Fortune 500 companies across India and abroad.',courses:'BBA · MBA · HRM · Marketing · Entrepreneurship',color:'#A29BFE',r:26},
+]
+
+const HISTORY = [
+  {year:'1948',title:'A Vision is Born',body:'Rajah Sir Muthiah Chettiar establishes Ethiraj College with a radical mission — to give women in Madras access to the finest higher education. A small institution with a colossal vision.',c:'rgba(139,0,0,0.06)'},
+  {year:'1970',title:'The Expansion Years',body:'The college grows rapidly. New departments emerge in Sciences and Commerce. Enrollment triples. Ethiraj becomes the name ambitious families aspire to across Tamil Nadu.',c:'rgba(255,215,0,0.03)'},
+  {year:'1990',title:'Rise of Research',body:'Dedicated research centres in Chemistry, Economics, and Social Sciences open. Faculty publish nationally. The college earns UGC recognition for research excellence.',c:'rgba(0,229,255,0.025)'},
+  {year:'2000',title:'Going Global',body:'International exchange programmes launch with UK, USA, and Australian universities. Ethiraj women begin studying in London, Melbourne, and New York.',c:'rgba(139,0,0,0.05)'},
+  {year:'2024',title:'The Future, Now',body:'NAAC A+. AI-integrated classrooms. An Innovation Lab. 30+ global university partnerships. Ethiraj stands at the forefront of women\'s education in India.',c:'rgba(255,215,0,0.05)'},
+]
+
+const PROGRAMS = [
+  {ico:'🎭',name:'Arts & Humanities',dept:'Liberal Arts Department',subs:'English · History · Tamil · Sociology · Philosophy'},
+  {ico:'⚗️',name:'Sciences',dept:'Natural Sciences',subs:'Physics · Chemistry · Botany · Zoology · Biotechnology'},
+  {ico:'📊',name:'Commerce',dept:'Commerce & Finance',subs:'B.Com · M.Com · Accounting · Banking · Finance'},
+  {ico:'💻',name:'Computer Science',dept:'Computing & IT',subs:'BCA · MCA · Data Science · AI & ML · Cyber Security'},
+  {ico:'📡',name:'Media Studies',dept:'Communication & Media',subs:'Journalism · Mass Comm · Visual Media · Advertising'},
+  {ico:'🏢',name:'Business Administration',dept:'Management Studies',subs:'BBA · MBA · Entrepreneurship · HRM · Marketing'},
+]
+
+const BUILDINGS = {
+  academic:{zone:'Academic Centre',name:'Academic Block',desc:'Four fully air-conditioned floors housing all six departments, 80+ smart classrooms, faculty offices, seminar halls, and the Principal\'s suite. Fully rebuilt in 2022 with 4K projection in every room.',stat:'6 Depts · 80+ Classrooms · 4 Floors'},
+  library:{zone:'Knowledge Hub',name:'Central Library',desc:'Two-storey library with 80,000+ volumes, e-library terminals, JSTOR database access, a rare manuscripts collection, and a serene open reading lawn. Staffed by expert librarians.',stat:'80,000 Books · JSTOR · Open Daily'},
+  aud:{zone:'Performance Space',name:'Grand Auditorium',desc:'1,500-seat AC auditorium with acoustic panel engineering, a 60-ft proscenium stage, automated LED lighting rigs, and broadcast-grade 7.1 audio. Home to Ethiraj Day and national events.',stat:'1,500 Seats · 60ft Stage · Full AC'},
+  sports:{zone:'Athletic Campus',name:'Sports Complex',desc:'5-acre sports campus with a 400m athletics track, basketball, badminton, and volleyball courts, a full gymnasium, and a yoga meditation hall with certified coaches for every discipline.',stat:'5 Acres · 8 Sports · Coaching Staff'},
+  labs:{zone:'Research Wing',name:'Laboratories',desc:'15 advanced labs spanning Chemistry, Biotechnology, Physics, Computer Science, Electronics, and Media. All equipped for UG, PG, and doctoral research — CSIR-funded and nationally recognised.',stat:'15 Labs · CSIR Funded · Research Grade'},
+}
+
+const LIFE = [
+  {tag:'Cultural Universe',name:'Ethiraj Day',desc:'Three days. Five thousand students. One legendary cultural festival that sets the bar for all of South India\'s inter-collegiate circuit.',items:['Drama','Dance','Music','Art','Literary'],color:'#FF6B6B',bg:'#05020a'},
+  {tag:'Athletic Spirit',name:'Sports at Ethiraj',desc:'Four national-level athletes, six consecutive athletics championships. A sports programme that builds the fire needed to win on and off any field.',items:['Cricket','Athletics','Basketball','Volleyball','Kabaddi'],color:'#00E5FF',bg:'#020a08'},
+  {tag:'Innovation Labs',name:'Clubs & Research',desc:'40+ clubs from Robotics to Fine Arts. The Ethiraj MUN draws 500+ delegates. The Innovation Lab has produced 3 student patents and 2 funded startups.',items:['Robotics','Fine Arts','MUN','Literary','Photography'],color:'#FFD700',bg:'#0a0a02'},
+  {tag:'Global Exposure',name:'Exchange Programmes',desc:'Semester exchanges with universities in the UK, USA, Australia, and Singapore. Students return transformed — with global perspective and international networks.',items:['UK','USA','Australia','Singapore','Japan'],color:'#00E5FF',bg:'#020508'},
+]
+
+const ALUMNI_STATS = [
+  {num:'15,000+',label:'Alumni worldwide across 40+ countries'},
+  {num:'NAAC A+',label:'Accreditation reflecting academic excellence'},
+  {num:'200+',label:'Annual events and programmes on campus'},
+  {num:'30+',label:'Global university partnerships active today'},
+]
+
+const ALUMNI = [
+  {ico:'🚀',name:'Dr. Revathi Krishnan',role:'Chief Scientific Officer · ISRO',batch:'Physics 1988',quote:'Ethiraj gave me the scientific rigour and courage to dream without limits. My journey to ISRO began in these laboratories.'},
+  {ico:'⚖️',name:'Ms. Priya Anand',role:'IAS Officer · Govt of Tamil Nadu',batch:'Economics 2002',quote:'The leadership values instilled at Ethiraj shaped every decision I have made in public service.'},
+  {ico:'💻',name:'Ms. Kavitha Murali',role:'VP Engineering · Google India',batch:'Computer Science 2005',quote:'Ethiraj taught me that a woman with a keyboard and a dream can change everything.'},
+  {ico:'🏥',name:'Dr. Lakshmi Subramaniam',role:'Chief of Oncology · Apollo Hospitals',batch:'Zoology 1995',quote:'Every diagnosis and discovery takes me back to the biology labs at Ethiraj. That is where my medical mind was formed.'},
+]
+
+const GLOBAL = [
+  {lbl:'International Exchange',title:'Study Abroad Programmes',desc:'Semester-long exchanges with 12 partner universities in the UK, USA, Australia, Singapore, and Japan. Dual credits. Global perspective.',tags:['Oxford Partnership','US Liberal Arts','ANU Australia','NUS Singapore']},
+  {lbl:'Research Network',title:'Global Research Collaborations',desc:'Joint projects with IIT Madras, CSIR, DST, and 8 international research institutions. National publications, patents, and funded grants.',tags:['IIT Madras','CSIR India','DST Funded','Intl Labs']},
+  {lbl:'Career Gateway',title:'Global Internships',desc:'Curated placements with MNCs, UN agencies, and international NGOs through our Industry Relations Cell and 15,000-strong alumni network.',tags:['UN Agencies','Fortune 500','Global NGOs','Funded Research']},
+  {lbl:'Industry Network',title:'80+ MoU Partners',desc:'Active MoUs with TCS, Infosys, HCL, Amazon, and 80+ companies for campus recruitment, skill workshops, live projects, and mentorship.',tags:['TCS','Infosys','Amazon India','HCL','Accenture']},
+]
+
+const ADM_STEPS = [
+  {n:'01',title:'Explore Programmes',desc:'Browse 40+ UG, PG, and research programmes across six departments.'},
+  {n:'02',title:'Check Eligibility',desc:'Review the academic requirements for your chosen programme and stream.'},
+  {n:'03',title:'Apply Online',desc:'Fill the application form and upload required documents securely.'},
+  {n:'04',title:'Start Your Journey',desc:'Attend counselling, pay fees, and join the Ethiraj universe.'},
+]
+
+const ADM_PROGS = [
+  {ico:'🎓',name:'Undergraduate Programmes',sub:'3-Year UG Degree',badge:'30+ Courses'},
+  {ico:'📜',name:'Postgraduate Programmes',sub:'2-Year PG Degree',badge:'15+ Courses'},
+  {ico:'🔬',name:'Research Programmes',sub:'Ph.D — 3 to 5 Years',badge:'7 Departments'},
+  {ico:'🏆',name:'Scholarships & Aid',sub:'Merit & Need-based',badge:'500+ Annually'},
+]
+
+const CONTACT = [
+  {ico:'📍',label:'Address',val:'70, Ethiraj Salai, Egmore\nChennai — 600 008, Tamil Nadu'},
+  {ico:'📞',label:'Phone',val:'+91 44 2827 4974 / 4975'},
+  {ico:'✉️',label:'Email',val:'principal@ethirajcollege.edu.in\nadmissions@ethirajcollege.edu.in'},
+  {ico:'🕐',label:'Hours',val:'Mon–Fri: 9:00 AM – 4:30 PM\nSat: 9:00 AM – 1:00 PM'},
+]
+
+/* ============================================================
+   DOM BUILD
+============================================================ */
+function buildAll() {
+  // History
+  document.getElementById('h-scenes').innerHTML = HISTORY.map((h,i)=>`
+    <div class="h-scene reveal" style="background:${h.c}">
+      <div class="h-scene-vis">${histSVG(h,i)}</div>
+      <div class="h-scene-info">
+        <div class="h-year-bg">${h.year}</div>
+        <div class="h-bar"></div>
+        <div class="h-title">${h.title}</div>
+        <div class="h-body">${h.body}</div>
+      </div>
+    </div>`).join('')
+
+  // Programs
+  document.getElementById('prog-list').innerHTML = PROGRAMS.map((p,i)=>`
+    <div class="prog-row reveal" style="transition-delay:${i*.06}s">
+      <div class="prog-num">0${i+1}</div>
+      <div class="prog-main">
+        <div class="prog-name">${p.name}</div>
+        <div class="prog-subs">${p.subs}</div>
+      </div>
+      <div class="prog-icon-col">${p.ico}</div>
+    </div>`).join('')
+
+  // Campus nav buttons
+  const bIcons={academic:'🏛️',library:'📚',aud:'🎭',sports:'🏃',labs:'🔬'}
+  document.getElementById('campus-btns').innerHTML = Object.keys(BUILDINGS).map(k=>`
+    <button class="campus-btn" id="cb-${k}" onclick="showBuilding('${k}')">
+      <span class="campus-btn-ico">${bIcons[k]}</span>
+      <span>${BUILDINGS[k].name}</span>
+    </button>`).join('')
+
+  // Student life
+  document.getElementById('life-grid').innerHTML = LIFE.map((l,i)=>`
+    <div class="life-row">
+      <div class="life-row-vis">${lifeSVG(l,i)}</div>
+      <div class="life-row-info">
+        <div class="life-tag" style="color:${l.color}">${l.tag}</div>
+        <div class="life-name">${l.name}</div>
+        <div class="life-desc">${l.desc}</div>
+        <div class="life-chips">${l.items.map(it=>`<span class="life-chip">${it}</span>`).join('')}</div>
+      </div>
+    </div>`).join('')
+
+  // Alumni stats
+  document.getElementById('alumni-stats').innerHTML = ALUMNI_STATS.map(s=>`
+    <div class="a-stat-row">
+      <div class="a-stat-num">${s.num}</div>
+      <div class="a-stat-label">${s.label}</div>
+    </div>`).join('')
+
+  // Alumni profiles
+  document.getElementById('alumni-profiles').innerHTML = ALUMNI.map(a=>`
+    <div class="a-profile reveal" >
+      <div class="a-ico">${a.ico}</div>
+      <div class="a-quote">"${a.quote}"</div>
+      <div class="a-name">${a.name}</div>
+      <div class="a-role">${a.role}</div>
+      <span class="a-batch">${a.batch}</span>
+    </div>`).join('')
+
+  // Global rows
+  document.getElementById('global-rows').innerHTML = GLOBAL.map((g,i)=>`
+    <div class="g-row reveal" style="transition-delay:${i*.08}s">
+      <div class="g-num">0${i+1}</div>
+      <div class="g-content">
+        <div class="g-lbl">${g.lbl}</div>
+        <div class="g-title">${g.title}</div>
+        <div class="g-desc">${g.desc}</div>
+        <div class="g-tags">${g.tags.map(t=>`<span class="g-tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`).join('')
+
+  // Admissions steps
+  document.getElementById('adm-steps').innerHTML = ADM_STEPS.map(s=>`
+    <div class="adm-step reveal">
+      <div class="adm-step-n">${s.n}</div>
+      <div>
+        <div class="adm-step-title">${s.title}</div>
+        <div class="adm-step-desc">${s.desc}</div>
+      </div>
+    </div>`).join('')
+
+  // Admissions progs
+  document.getElementById('adm-progs').innerHTML = ADM_PROGS.map(p=>`
+    <div class="adm-prog">
+      <div class="adm-prog-left">
+        <span class="adm-prog-ico">${p.ico}</span>
+        <div>
+          <div class="adm-prog-name">${p.name}</div>
+          <div class="adm-prog-sub">${p.sub}</div>
+        </div>
+      </div>
+      <div class="adm-prog-right">
+        <span class="adm-prog-badge">${p.badge}</span>
+        <span class="adm-prog-arr">→</span>
+      </div>
+    </div>`).join('')
+
+  // Contact info
+  document.getElementById('c-info').innerHTML = CONTACT.map(c=>`
+    <div class="c-info-row">
+      <div class="c-info-ico">${c.ico}</div>
+      <div>
+        <div class="c-info-label">${c.label}</div>
+        <div class="c-info-val">${c.val.replace(/\n/g,'<br/>')}</div>
+      </div>
+    </div>`).join('')
+}
+
+/* ── SVG ILLUSTRATIONS ── */
+function histSVG(h,i) {
+  const cols=['139,0,0','255,215,0','0,229,255','139,0,0','255,215,0']
+  const c=cols[i]
+  const dots=Array.from({length:22},()=>`<circle cx="${80+Math.random()*340}" cy="${50+Math.random()*300}" r="${Math.random()*2+.4}" fill="rgba(${c},${Math.random()*.35+.08})"/>`).join('')
+  return `<svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%">
+    <rect width="500" height="380" fill="#060310"/>
+    <circle cx="250" cy="190" r="130" fill="none" stroke="rgba(${c},0.07)" stroke-width="1"/>
+    <circle cx="250" cy="190" r="85" fill="none" stroke="rgba(${c},0.05)" stroke-width="1"/>
+    <circle cx="250" cy="190" r="42" fill="rgba(${c},0.06)" stroke="rgba(${c},0.18)" stroke-width="1"/>
+    <text x="250" y="220" text-anchor="middle" font-family="Playfair Display,serif" font-size="75" font-weight="900" fill="rgba(${c},0.1)">${h.year}</text>
+    ${dots}
+  </svg>`
+}
+
+function lifeSVG(l,i) {
+  const hex = l.color.replace('#','')
+  const r=parseInt(hex.substr(0,2),16), g=parseInt(hex.substr(2,2),16), b=parseInt(hex.substr(4,2),16)
+  const dots=Array.from({length:25},()=>`<circle cx="${Math.random()*500}" cy="${Math.random()*450}" r="${Math.random()*1.8+.3}" fill="rgba(${r},${g},${b},${Math.random()*.28+.05})"/>`).join('')
+  const orb=l.items.map((it,j)=>{
+    const a=(j/l.items.length)*Math.PI*2
+    const or=145, x=250+or*Math.cos(a), y=225+or*Math.sin(a)
+    return `<circle cx="${x}" cy="${y}" r="${9+j*2.5}" fill="rgba(${r},${g},${b},${.18+j*.04})" stroke="rgba(${r},${g},${b},.3)" stroke-width="1"/>`
+  }).join('')
+  return `<svg viewBox="0 0 500 450" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%">
+    <rect width="500" height="450" fill="${l.bg}"/>
+    <circle cx="250" cy="225" r="155" fill="rgba(${r},${g},${b},0.04)" stroke="rgba(${r},${g},${b},0.1)" stroke-width="1"/>
+    <circle cx="250" cy="225" r="100" fill="rgba(${r},${g},${b},0.03)" stroke="rgba(${r},${g},${b},0.07)" stroke-width="1"/>
+    ${orb}${dots}
+    <text x="250" y="252" text-anchor="middle" font-family="Playfair Display,serif" font-size="3.5rem" font-weight="900" fill="rgba(${r},${g},${b},0.07)">${l.items[0]}</text>
+  </svg>`
+}
+
+/* ============================================================
+   INTRO SEQUENCE
+============================================================ */
+window.addEventListener('DOMContentLoaded', function() {
+  buildAll()
+  initCursor() // cursor active from very start
+  startIntro()
+})
+
+function startIntro() {
+  const canvas = document.getElementById('intro-canvas')
+  const ctx = canvas.getContext('2d')
+  let W = canvas.width = window.innerWidth
+  let H = canvas.height = window.innerHeight
+  const pts = Array.from({length:100},()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    vx:(Math.random()-.5)*.28, vy:(Math.random()-.5)*.28,
+    r:Math.random()*1.4+.3, gold:Math.random()>.55
+  }))
+  let rafId
+  function draw(){
+    rafId=requestAnimationFrame(draw)
+    ctx.clearRect(0,0,W,H)
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
+      ctx.fillStyle=p.gold?'rgba(255,215,0,0.38)':'rgba(139,0,0,0.45)'; ctx.fill()
+    })
+  }
+  draw()
+  window.addEventListener('resize',()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight})
+
+  // Loading bar
+  let pct=0
+  const bar=document.getElementById('intro-bar')
+  const t=setInterval(()=>{
+    pct=Math.min(pct+Math.random()*2.8+0.5,100)
+    bar.style.width=pct+'%'
+    if(pct>=100){
+      clearInterval(t)
+      const h1 = document.getElementById('intro-h1')
+      const sub = document.getElementById('intro-sub')
+      const btn = document.getElementById('intro-btn')
+      setTimeout(()=>{ if(h1) h1.classList.add('show') }, 200)
+      setTimeout(()=>{ if(sub) sub.classList.add('show') }, 800)
+      setTimeout(()=>{
+        if(btn){
+          btn.classList.add('show')
+          btn.style.pointerEvents = 'auto'
+          btn.style.zIndex = '20'
+        }
+      }, 1200)
+    }
+  },30)
+
+  // Safety fallback: if loading takes too long, show button anyway
+  setTimeout(()=>{
+    const btn=document.getElementById('intro-btn')
+    if(btn && btn.style.opacity !== '1'){
+      btn.classList.add('show')
+      btn.style.opacity='1'
+      btn.style.transform='translateY(0)'
+      btn.style.pointerEvents='auto'
+    }
+    const h1=document.getElementById('intro-h1')
+    const sub=document.getElementById('intro-sub')
+    if(h1) h1.classList.add('show')
+    if(sub) sub.classList.add('show')
+  }, 5000)
+
+  window._stopIntro = ()=>cancelAnimationFrame(rafId)
+}
+
+function launchSite() {
+  if(window._stopIntro) window._stopIntro()
+  const intro = document.getElementById('intro')
+  const site  = document.getElementById('main-site')
+
+  // Scale crest up
+  const crest = intro.querySelector('.intro-crest-svg') || intro.querySelector('.intro-crest-wrap')
+  if(crest){
+    crest.style.transition = 'transform 0.8s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease 0.45s'
+    crest.style.transform  = 'scale(12)'
+    crest.style.opacity    = '0'
+  }
+
+  // Fade out intro
+  setTimeout(() => { intro.style.opacity = '0' }, 400)
+
+  // Show site, remove intro from DOM entirely
+  setTimeout(() => {
+    intro.style.display        = 'none'
+    intro.style.pointerEvents  = 'none'
+    site.style.opacity         = '1'
+    site.style.pointerEvents   = 'auto'
+    initSite()
+  }, 950)
+}
+
+/* ============================================================
+   SITE INIT
+============================================================ */
+function initSite() {
+  // 1. Show nav
+  const nav = document.getElementById('nav')
+  if(nav) nav.classList.add('ready')
+
+  // 2. Make ALL interactive elements clickable explicitly
+  document.querySelectorAll('a,button,input,textarea,select').forEach(el => {
+    el.style.pointerEvents = 'auto'
+    if(!el.matches('input,textarea,select')) el.style.cursor = 'none'
+  })
+
+  // 3. Campus map buildings — JS click listeners (most reliable)
+  document.querySelectorAll('.map-bld').forEach(el => {
+    const key = el.id.replace('mb-','')
+    el.style.cursor = 'pointer'
+    el.style.pointerEvents = 'auto'
+    el.onclick = null  // clear any old handler
+    el.addEventListener('click', (e) => {
+      e.stopPropagation()
+      showBuilding(key)
+    })
+    // Also make child elements clickable
+    el.querySelectorAll('*').forEach(child => {
+      child.style.pointerEvents = 'auto'
+    })
+  })
+
+  // 4. Campus side nav buttons
+  document.querySelectorAll('.campus-btn').forEach(btn => {
+    btn.style.pointerEvents = 'auto'
+  })
+
+  // 5. Smooth scroll for all nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const href = a.getAttribute('href')
+      const target = document.querySelector(href)
+      if(target){
+        e.preventDefault()
+        target.scrollIntoView({behavior:'smooth'})
+        closeMob()
+      }
+    })
+  })
+
+  // 6. Hamburger menu button
+  const hambtn = document.querySelector('.nav-hamburger')
+  if(hambtn) hambtn.addEventListener('click', openMob)
+  const closebtn = document.querySelector('.mob-close')
+  if(closebtn) closebtn.addEventListener('click', closeMob)
+
+  // 7. Theme button
+  const themebtn = document.getElementById('theme-btn')
+  if(themebtn) themebtn.addEventListener('click', toggleTheme)
+
+  // 8. Init everything
+  initHeroCanvas()
+  initGalaxy()
+  initScrollListeners()
+  initCounters()
+  initReveal()
+  animHeroEntrance()
+
+  // 9. Show first campus building by default
+  setTimeout(() => showBuilding('academic'), 600)
+}
+
+/* ============================================================
+   CURSOR — works on all pointer devices, hides on touch
+============================================================ */
+function initCursor() {
+  // Only show on devices with a real pointer (mouse)
+  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return
+
+  const dot = document.getElementById('cur')
+  const ring = document.getElementById('cur-ring')
+  dot.style.display = 'block'
+  ring.style.display = 'block'
+
+  let rx=0, ry=0 // ring current position
+  let tx=0, ty=0 // ring target
+
+  document.addEventListener('mousemove', e=>{
+    // Dot snaps instantly
+    dot.style.left = e.clientX+'px'
+    dot.style.top = e.clientY+'px'
+    tx = e.clientX
+    ty = e.clientY
+  })
+
+  // Ring follows with smooth lerp via RAF
+  function animRing(){
+    requestAnimationFrame(animRing)
+    rx += (tx-rx) * 0.1
+    ry += (ty-ry) * 0.1
+    ring.style.left = rx+'px'
+    ring.style.top = ry+'px'
+  }
+  animRing()
+
+  // Hover states via event delegation (works for dynamic elements too)
+  document.addEventListener('mouseover', e=>{
+    if(e.target.closest('a,button,[role="button"]')){
+      dot.classList.add('on-link')
+      ring.classList.add('on-link')
+    }
+  })
+  document.addEventListener('mouseout', e=>{
+    if(e.target.closest('a,button,[role="button"]')){
+      dot.classList.remove('on-link')
+      ring.classList.remove('on-link')
+    }
+  })
+
+  // Hide when mouse leaves window
+  document.addEventListener('mouseleave',()=>{
+    dot.style.opacity='0'; ring.style.opacity='0'
+  })
+  document.addEventListener('mouseenter',()=>{
+    dot.style.opacity='1'; ring.style.opacity='1'
+  })
+}
+
+/* ============================================================
+   HERO CANVAS
+============================================================ */
+function initHeroCanvas() {
+  const canvas = document.getElementById('hero-canvas')
+  const ctx = canvas.getContext('2d')
+  const isMob = window.innerWidth < 700
+  let W = canvas.width = window.innerWidth
+  let H = canvas.height = window.innerHeight
+  const N = isMob ? 55 : 120
+  const pts = Array.from({length:N},()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    vx:(Math.random()-.5)*.22, vy:(Math.random()-.5)*.22,
+    r:Math.random()*1.4+.3, gold:Math.random()>.52, a:Math.random()*.38+.08
+  }))
+  let mx=W/2, my=H/2, active=true
+  if(!isMob) document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY})
+  document.addEventListener('visibilitychange',()=>{active=!document.hidden})
+  let last=0
+  ;(function draw(now){
+    requestAnimationFrame(draw)
+    if(!active||now-last<(isMob?40:18)) return; last=now
+    ctx.clearRect(0,0,W,H)
+    pts.forEach(p=>{
+      const dx=mx-p.x,dy=my-p.y,d=Math.sqrt(dx*dx+dy*dy)
+      if(d<100){p.vx-=dx/d*.01;p.vy-=dy/d*.01}
+      p.vx*=.99;p.vy*=.99;p.x+=p.vx;p.y+=p.vy
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
+      ctx.fillStyle=p.gold?`rgba(255,215,0,${p.a*.4})`:`rgba(139,0,0,${p.a*.5})`
+      ctx.fill()
+    })
+    if(!isMob) for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy)
+      if(d<90){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(255,215,0,${(1-d/90)*.028})`;ctx.lineWidth=.5;ctx.stroke()}
+    }
+  })()
+  window.addEventListener('resize',()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight})
+}
+
+/* ============================================================
+   HERO TEXT ENTRANCE
+============================================================ */
+function animHeroEntrance() {
+  const ease = 'cubic-bezier(0.22,1,0.36,1)'
+  const delay = (el, d, cb) => setTimeout(()=>{
+    el.style.transition=`transform 1s ${ease}, opacity .8s ease`
+    if(cb) cb(el); else{el.style.opacity='1';el.style.transform='none'}
+  }, d)
+
+  ;['hl1','hl2','hl3'].forEach((id,i)=>{
+    const el=document.getElementById(id)
+    if(el) setTimeout(()=>{
+      el.style.transition=`transform 1.1s ${ease}`
+      el.style.transform='translateY(0)'
+    }, 150+i*170)
+  })
+  delay(document.getElementById('he'), 120)
+  delay(document.getElementById('hdesc'), 820)
+  delay(document.getElementById('hbtns'), 1050)
+  setTimeout(()=>{
+    const hs=document.getElementById('hscroll')
+    if(hs){hs.style.transition='opacity .8s ease';hs.style.opacity='0.55'}
+    const hcf=document.getElementById('hero-crest-float')
+    if(hcf){
+      hcf.style.transition='opacity 1.2s ease'
+      hcf.style.opacity='0.88'
+    }
+  }, 800)
+}
+
+/* ============================================================
+   GALAXY CANVAS
+============================================================ */
+function initGalaxy() {
+  const canvas = document.getElementById('galaxy-canvas')
+  if(!canvas) return
+  const ctx = canvas.getContext('2d')
+  const sec = document.getElementById('galaxy')
+  let W=canvas.width=sec.offsetWidth, H=canvas.height=sec.offsetHeight
+  const cx=W*.62, cy=H*.5
+
+  const planets = GALAXY.map((g,i)=>{
+    const a=(i/GALAXY.length)*Math.PI*2
+    const or=105+i*42
+    return{...g, angle:a, orbitR:or, speed:.0007+i*.00025, x:cx, y:cy}
+  })
+  let hov=-1
+
+  function draw(){
+    requestAnimationFrame(draw)
+    ctx.clearRect(0,0,W,H)
+
+    // Stars
+    ctx.fillStyle='rgba(240,234,224,.06)'
+    for(let i=0;i<180;i++){
+      ctx.beginPath()
+      ctx.arc(((i*79+11)%W),((i*43+71)%H),Math.random()>.95?.7:.25,0,Math.PI*2)
+      ctx.fill()
+    }
+
+    // Sun
+    const sg=ctx.createRadialGradient(cx,cy,0,cx,cy,46)
+    sg.addColorStop(0,'rgba(255,215,0,0.7)')
+    sg.addColorStop(.4,'rgba(139,0,0,0.45)')
+    sg.addColorStop(1,'transparent')
+    ctx.beginPath();ctx.arc(cx,cy,46,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill()
+    ctx.beginPath();ctx.arc(cx,cy,18,0,Math.PI*2)
+    ctx.fillStyle='#FFD700';ctx.fill()
+    ctx.fillStyle='#8B0000';ctx.font='bold 11px Space Grotesk'
+    ctx.textAlign='center';ctx.textBaseline='middle'
+    ctx.fillText('E',cx,cy)
+
+    planets.forEach((p,i)=>{
+      p.angle+=p.speed
+      ctx.beginPath();ctx.arc(cx,cy,p.orbitR,0,Math.PI*2)
+      ctx.strokeStyle='rgba(255,215,0,0.045)';ctx.lineWidth=1;ctx.stroke()
+      p.x=cx+Math.cos(p.angle)*p.orbitR
+      p.y=cy+Math.sin(p.angle)*p.orbitR
+      const isH=hov===i, pr=p.r+(isH?7:0)
+
+      const pg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,pr*2.8)
+      pg.addColorStop(0,p.color+'bb');pg.addColorStop(1,'transparent')
+      ctx.beginPath();ctx.arc(p.x,p.y,pr*2.8,0,Math.PI*2);ctx.fillStyle=pg;ctx.fill()
+      ctx.beginPath();ctx.arc(p.x,p.y,pr,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill()
+      if(isH){ctx.beginPath();ctx.arc(p.x,p.y,pr+5,0,Math.PI*2);ctx.strokeStyle=p.color;ctx.lineWidth=1.5;ctx.stroke()}
+
+      const lY=p.y<cy?p.y-pr-13:p.y+pr+13
+      ctx.fillStyle=isH?'#fff':'rgba(240,234,224,0.45)'
+      ctx.font=`${isH?'600':'400'} ${isH?'10':'9'}px Space Grotesk`
+      ctx.textAlign='center';ctx.textBaseline='middle'
+      ctx.fillText(p.name.split(' ')[0],p.x,lY)
+    })
+  }
+  draw()
+
+  canvas.addEventListener('mousemove',e=>{
+    const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top
+    let found=-1
+    planets.forEach((p,i)=>{if(Math.hypot(mx-p.x,my-p.y)<p.r+14)found=i})
+    hov=found
+    if(found>=0){
+      document.getElementById('gn').textContent=planets[found].name
+      document.getElementById('gd').textContent=planets[found].desc
+      document.getElementById('gc').textContent=planets[found].courses
+    }
+  })
+  canvas.addEventListener('mouseleave',()=>{hov=-1})
+
+  window.addEventListener('resize',()=>{
+    W=canvas.width=sec.offsetWidth
+    H=canvas.height=sec.offsetHeight
+  })
+}
+
+/* ============================================================
+   CAMPUS MAP
+============================================================ */
+function showBuilding(k){
+  const d=BUILDINGS[k]; if(!d) return
+  // Animate info panel
+  const name=document.getElementById('bld-name')
+  const desc=document.getElementById('bld-desc')
+  const stat=document.getElementById('bld-stat')
+  const zone=document.getElementById('bld-zone')
+  if(name){name.style.transition='opacity .3s';name.style.opacity='0';setTimeout(()=>{name.textContent=d.name;name.style.opacity='1'},150)}
+  if(desc){desc.style.transition='opacity .3s';desc.style.opacity='0';setTimeout(()=>{desc.textContent=d.desc;desc.style.opacity='1'},200)}
+  if(stat){stat.style.transition='opacity .3s';stat.style.opacity='0';setTimeout(()=>{stat.textContent=d.stat;stat.style.opacity='1'},250)}
+  if(zone) zone.textContent=d.zone
+  document.querySelectorAll('.map-bld').forEach(b=>b.classList.remove('lit'))
+  const el=document.getElementById('mb-'+k); if(el)el.classList.add('lit')
+  document.querySelectorAll('.campus-btn').forEach(b=>{
+    b.classList.toggle('act',b.id==='cb-'+k)
+  })
+}
+
+/* ============================================================
+   SCROLL LISTENERS
+============================================================ */
+function initScrollListeners(){
+  let ticking=false
+  window.addEventListener('scroll',()=>{
+    if(!ticking){
+      requestAnimationFrame(()=>{
+        const sy=window.scrollY
+        const maxS=document.body.scrollHeight-window.innerHeight
+        document.getElementById('spbar').style.width=(sy/maxS*100)+'%'
+        document.getElementById('nav').classList.toggle('scrolled',sy>70)
+        // Hero parallax (desktop only)
+        if(window.innerWidth>700){
+          const hc=document.querySelector('.hero-content')
+          if(hc&&sy<window.innerHeight){
+            hc.style.transform=`translateY(${sy*.14}px)`
+            hc.style.opacity=''+(1-sy/window.innerHeight*1.2)
+          }
+        }
+        ticking=false
+      })
+      ticking=true
+    }
+  },{passive:true})
+}
+
+/* ============================================================
+   INTERSECTION OBSERVER — REVEAL ANIMATIONS
+============================================================ */
+function initReveal(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in')
+        obs.unobserve(e.target)
+      }
+    })
+  },{threshold:0.07,rootMargin:'0px 0px -40px 0px'})
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>{
+    // stagger via existing transition-delay or add one
+    obs.observe(el)
+  })
+}
+
+/* ============================================================
+   COUNTERS
+============================================================ */
+function initCounters(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return
+      const el=e.target
+      const t=parseInt(el.dataset.t), s=el.dataset.s||''
+      let cur=0; const step=t/(1800/16)
+      const tm=setInterval(()=>{
+        cur=Math.min(cur+step,t)
+        el.textContent=(cur>=1000?Math.round(cur/1000)+'k':Math.round(cur))+s
+        if(cur>=t) clearInterval(tm)
+      },16)
+      obs.unobserve(el)
+    })
+  },{threshold:.5})
+  document.querySelectorAll('.n-val').forEach(el=>obs.observe(el))
+}
+
+/* ============================================================
+   THEME TOGGLE
+============================================================ */
+function toggleTheme(){
+  const html=document.documentElement
+  const isLight=html.getAttribute('data-theme')==='light'
+  html.setAttribute('data-theme',isLight?'dark':'light')
+  const btn=document.getElementById('theme-btn')
+  if(btn) btn.textContent=isLight?'☀':'🌙'
+}
+
+/* ============================================================
+   MOBILE NAV
+============================================================ */
+function openMob(){
+  const m=document.getElementById('mob-menu')
+  if(m){ m.classList.add('open'); document.body.style.overflow='hidden'; }
+}
+function closeMob(){
+  const m=document.getElementById('mob-menu')
+  if(m){ m.classList.remove('open'); document.body.style.overflow=''; }
+}
+
+/* ============================================================
+   CONTACT FORM
+============================================================ */
+function submitForm(e){
+  e.preventDefault()
+  const btn=document.getElementById('cf-btn')
+  if(!btn) return
+  btn.textContent = 'Sending...'
+  btn.style.background = 'rgba(60,60,60,0.6)'
+  btn.disabled = true
+  btn.style.pointerEvents = 'none'
+  setTimeout(function(){
+    btn.textContent = 'Message Sent! We will be in touch soon.'
+    btn.style.background = 'linear-gradient(135deg,#0d6e3c,#14a05a)'
+    btn.disabled = false
+    btn.style.pointerEvents = 'auto'
+    setTimeout(function(){
+      btn.textContent = 'Transmit Message'
+      btn.style.background = ''
+    }, 4000)
+  }, 1600)
+}
+</script>
+</body>
+</html>
