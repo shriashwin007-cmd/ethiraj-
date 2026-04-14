@@ -1,230 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Ethiraj College | Digital Universe</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Space+Grotesk:wght@300;500;700&family=DM+Mono&display=swap" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script>
+    // 1. CURSOR MOTION
+    const cur = document.getElementById('cur');
+    const ring = document.getElementById('cur-ring');
+    document.addEventListener('mousemove', (e) => {
+        gsap.to(cur, { x: e.clientX, y: e.clientY, duration: 0 });
+        gsap.to(ring, { x: e.clientX - 14, y: e.clientY - 14, duration: 0.15 });
+    });
+
+    // 2. THE FIX: SMOOTH SCROLL FOR "ENTER UNIVERSE"
+    document.querySelector('.btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector('#stats');
+        target.scrollIntoView({ behavior: 'smooth' });
+        
+        // Bonus: Flash the ring when clicking
+        gsap.to(ring, { scale: 2, opacity: 0, duration: 0.5, onComplete: () => {
+            gsap.set(ring, { scale: 1, opacity: 1 });
+        }});
+    });
+
+    // 3. UNIVERSE CANVAS ANIMATION
+    const canvas = document.getElementById('universe-canvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Star {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.5;
+            this.speed = Math.random() * 0.3;
+            this.alpha = Math.random();
+        }
+        draw() {
+            ctx.fillStyle = `rgba(255, 215, 0, ${this.alpha})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        update() {
+            this.y -= this.speed;
+            if (this.y < 0) this.y = canvas.height;
+            this.alpha += 0.01;
+            if (this.alpha > 1) this.alpha = 0;
+        }
+    }
+
+    for(let i=0; i<150; i++) stars.push(new Star());
+
+    function animateUniverse() {
+        ctx.clearRect(0,0,canvas.width, canvas.height);
+        stars.forEach(s => { s.update(); s.draw(); });
+        requestAnimationFrame(animateUniverse);
+    }
+    animateUniverse();
+
+    // 4. GSAP ENTRANCE & STAT COUNTER
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from(".hero-h1", { opacity: 0, y: 100, duration: 1.5, ease: "power4.out" });
     
-    <style>
-        :root {
-            --red: #8B0000; --red2: #C41E1E; --gold: #FFD700; --gold2: #FFF5CC;
-            --void: #030205; --ink: #F0EAE0; --line: rgba(255,215,0,0.1);
-        }
+    // This makes the numbers "jump" when you scroll down
+    gsap.from(".stat-box", {
+        scrollTrigger: {
+            trigger: "#stats",
+            start: "top 80%",
+        },
+        y: 50, 
+        opacity: 0, 
+        stagger: 0.2, 
+        duration: 1, 
+        ease: "back.out(1.7)"
+    });
 
-        * { margin:0; padding:0; box-sizing:border-box; cursor: none; }
-        body { 
-            background: var(--void); color: var(--ink); 
-            font-family: 'Space Grotesk', sans-serif; 
-            overflow-x: hidden; line-height: 1.6;
-        }
-
-        /* CUSTOM CURSOR */
-        #cur {
-            position: fixed; width: 12px; height: 12px; background: var(--gold);
-            border-radius: 50%; pointer-events: none; z-index: 10000;
-            box-shadow: 0 0 15px var(--gold);
-        }
-        #cur-ring {
-            position: fixed; width: 40px; height: 40px; border: 1px solid var(--gold);
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            transition: transform 0.1s ease-out;
-        }
-
-        /* NAV */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 30px 50px;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; background: linear-gradient(to bottom, var(--void), transparent);
-        }
-        .logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.5rem; color: var(--gold); }
-
-        /* HERO SECTION */
-        #hero {
-            height: 100vh; display: flex; align-items: center; justify-content: center;
-            position: relative; overflow: hidden; text-align: center;
-        }
-        #universe-canvas { position: absolute; top: 0; left: 0; z-index: 1; }
-        
-        .hero-content { position: relative; z-index: 2; }
-        .hero-h1 {
-            font-family: 'Playfair Display', serif; font-size: clamp(4rem, 12vw, 10rem);
-            line-height: 0.85; margin-bottom: 20px;
-        }
-        .hero-h1 span { display: block; color: transparent; -webkit-text-stroke: 1.5px var(--ink); opacity: 0.5; }
-        .hero-h1 em { font-style: italic; color: var(--gold); -webkit-text-stroke: 0; }
-
-        /* BUTTONS */
-        .btn {
-            padding: 15px 40px; border: 1px solid var(--gold); color: var(--gold);
-            text-transform: uppercase; font-family: 'DM Mono', monospace;
-            font-size: 0.8rem; letter-spacing: 3px; text-decoration: none;
-            transition: all 0.4s; position: relative; display: inline-block;
-            margin-top: 20px;
-        }
-        .btn:hover { background: var(--red); color: white; border-color: var(--red); box-shadow: 0 0 30px rgba(139,0,0,0.5); }
-
-        /* STATS STRIP */
-        #stats {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-            background: rgba(255,255,255,0.02);
-        }
-        .stat-box { padding: 60px 40px; text-align: center; border-right: 1px solid var(--line); }
-        .stat-num { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold); display: block; }
-        .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; }
-
-        /* ADMISSIONS SECTION (The missing part) */
-        #admissions { padding: 100px 10%; position: relative; }
-        .adm-card {
-            background: rgba(139,0,0,0.05); border: 1px solid var(--line);
-            padding: 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px;
-        }
-        .adm-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); line-height: 1; }
-        .step { margin-bottom: 30px; border-left: 2px solid var(--red); padding-left: 20px; }
-        .step h4 { color: var(--gold); margin-bottom: 5px; }
-
-        /* FOOTER */
-        footer { padding: 80px 10%; border-top: 1px solid var(--line); text-align: center; }
-        .footer-logo { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 20px; display: block; }
-        
-        @media (max-width: 768px) {
-            #stats { grid-template-columns: 1fr 1fr; }
-            .adm-card { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
-
-    <div id="cur"></div>
-    <div id="cur-ring"></div>
-
-    <nav>
-        <div class="logo">ETHIRAJ</div>
-        <div style="font-family: 'DM Mono'; font-size: 0.7rem; letter-spacing: 2px;">DIGITAL EXPERIENCE — 2026</div>
-    </nav>
-
-    <section id="hero">
-        <canvas id="universe-canvas"></canvas>
-        <div class="hero-content">
-            <h1 class="hero-h1">
-                BOLD. <span>BRILLIANT.</span> <em>UNSTOPPABLE.</em>
-            </h1>
-            <p style="max-width: 600px; margin: 0 auto 30px; opacity: 0.8;">
-                Founded in 1948, Ethiraj College for Women remains a beacon of excellence, 
-                shaping the leaders of tomorrow through innovation and tradition.
-            </p>
-            <a href="#admissions" class="btn">Start Your Journey</a>
-        </div>
-    </section>
-
-    <section id="stats">
-        <div class="stat-box"><span class="stat-num">78</span><span class="stat-label">Years of Legacy</span></div>
-        <div class="stat-box"><span class="stat-num">35k</span><span class="stat-label">Empowered Alumni</span></div>
-        <div class="stat-box"><span class="stat-num">A++</span><span class="stat-label">NAAC Rating</span></div>
-        <div class="stat-box" style="border:none;"><span class="stat-num">1st</span><span class="stat-label">In Excellence</span></div>
-    </section>
-
-    <section id="admissions">
-        <div class="adm-card">
-            <div>
-                <h2 class="adm-title">ADMISSIONS<br>2026-27</h2>
-                <p style="margin-top:20px; opacity: 0.7;">Join the ranks of the finest minds in the country. Our digital portal is now open for applications.</p>
-                <a href="#" class="btn" style="background: var(--red); color: white; border: none;">Apply Now</a>
-            </div>
-            <div>
-                <div class="step">
-                    <h4>01. Register</h4>
-                    <p>Create your profile on our centralized digital portal.</p>
-                </div>
-                <div class="step">
-                    <h4>02. Documentation</h4>
-                    <p>Upload your academic transcripts and identity proofs.</p>
-                </div>
-                <div class="step">
-                    <h4>03. Verification</h4>
-                    <p>Attend our interactive virtual orientation session.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <span class="footer-logo">ETHIRAJ COLLEGE</span>
-        <p style="opacity: 0.5; font-size: 0.8rem; letter-spacing: 1px;">70, ETHIRAJ SALAI, EGMORE, CHENNAI - 600008</p>
-        <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">
-            <p>© 2026 Crafted for the Future</p>
-        </div>
-    </footer>
-
-    <script>
-        // CURSOR MOTION
-        const cur = document.getElementById('cur');
-        const ring = document.getElementById('cur-ring');
-        document.addEventListener('mousemove', (e) => {
-            gsap.to(cur, { x: e.clientX, y: e.clientY, duration: 0 });
-            gsap.to(ring, { x: e.clientX - 14, y: e.clientY - 14, duration: 0.15 });
+    // Numerical counter effect for the demo
+    const items = document.querySelectorAll(".stat-num");
+    items.forEach((item) => {
+        let endValue = parseInt(item.innerText);
+        if (isNaN(endValue)) return; // Skip "A++"
+        gsap.fromTo(item, { innerText: 0 }, {
+            innerText: endValue,
+            duration: 2,
+            scrollTrigger: item,
+            snap: { innerText: 1 },
+            ease: "power1.inOut"
         });
-
-        // UNIVERSE CANVAS ANIMATION
-        const canvas = document.getElementById('universe-canvas');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Star {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5;
-                this.speed = Math.random() * 0.3;
-                this.alpha = Math.random();
-            }
-            draw() {
-                ctx.fillStyle = `rgba(255, 215, 0, ${this.alpha})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            update() {
-                this.y -= this.speed;
-                if (this.y < 0) this.y = canvas.height;
-                this.alpha += 0.01;
-                if (this.alpha > 1) this.alpha = 0;
-            }
-        }
-
-        for(let i=0; i<150; i++) stars.push(new Star());
-
-        function animateUniverse() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            stars.forEach(s => { s.update(); s.draw(); });
-            requestAnimationFrame(animateUniverse);
-        }
-        animateUniverse();
-
-        // GSAP ENTRANCE ANIMATIONS
-        gsap.registerPlugin(ScrollTrigger);
-
-        gsap.from(".hero-h1", { opacity: 0, y: 100, duration: 1.5, ease: "power4.out" });
-        
-        gsap.from(".stat-box", {
-            scrollTrigger: "#stats",
-            y: 50, opacity: 0, stagger: 0.2, duration: 1, ease: "back.out(1.7)"
-        });
-
-        gsap.from(".adm-card", {
-            scrollTrigger: "#admissions",
-            scale: 0.9, opacity: 0, duration: 1.2
-        });
-    </script>
-</body>
-</html>
+    });
+</script>
